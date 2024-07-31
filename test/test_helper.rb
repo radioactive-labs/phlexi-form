@@ -10,3 +10,5 @@ require "minitest/reporters"
 Minitest::Reporters.use!
 
 require "phlexi-form"
+require "phlex/testing/capybara"
+require "capybara/minitest"

@@ -69,7 +69,7 @@ module Phlexi
           end
 
           if (attributes[:type] == :file) ? attributes[:multiple] : attributes.delete(:multiple)
-            attributes[:name] = "#{attributes[:name].sub(/\[]$/, "")}[]"
+            attributes[:name] = "#{attributes[:name].sub(/\[\]$/, "")}[]"
           end
         end
       end

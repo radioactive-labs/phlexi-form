@@ -27,7 +27,8 @@ class Superform::InstallGenerator < Rails::Generators::Base
   end
 
   private
-    def gem_in_bundle?(gem_name)
-      Bundler.load.specs.any? { |spec| spec.name == gem_name }
-    end
+
+  def gem_in_bundle?(gem_name)
+    Bundler.load.specs.any? { |spec| spec.name == gem_name }
+  end
 end

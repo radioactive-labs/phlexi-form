@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "A better way to customize and build forms for your Rails application"
   spec.homepage = "https://github.com/radioactive-labs/phlexi-form"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 3.2.2"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
@@ -36,4 +36,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency "phlex", "~> 1.10"
   spec.add_dependency "activesupport"
   spec.add_dependency "zeitwerk"
+
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "minitest-reporters"
+  spec.add_development_dependency "standard"
+  # spec.add_development_dependency "brakeman"
+  spec.add_development_dependency "bundle-audit"
+  spec.add_development_dependency "appraisal"
+  spec.add_development_dependency "combustion"
 end

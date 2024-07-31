@@ -34,7 +34,11 @@ module Phlexi
           super(key, parent: parent)
 
           @object = object
-          @value = (value != :__i_form_builder_nil_value_i__) ? value : (object.respond_to?(key) ? object.send(key) : nil)
+          @value = if value != :__i_form_builder_nil_value_i__
+            value
+          else
+            object.respond_to?(key) ? object.send(key) : nil
+          end
           @attributes = attributes
           @options = options
           @dom = Structure::DOM.new(field: self)

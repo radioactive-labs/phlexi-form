@@ -65,7 +65,7 @@ module Phlexi
             attributes[:step] = attributes.fetch(:step, field.step)
           else
             # Handle any unrecognized input types
-            Rails.logger.warn("Unhandled input type: #{attributes[:type]}")
+            # Rails.logger.warn("Unhandled input type: #{attributes[:type]}")
           end
 
           if (attributes[:type] == :file) ? attributes[:multiple] : attributes.delete(:multiple)

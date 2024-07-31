@@ -30,8 +30,8 @@ module Phlexi
           when "postgresql"
             column.array? || (column.type == :string && column.sql_type.include?("[]"))
           end # || object.class.attribute_types[key.to_s].is_a?(ActiveRecord::Type::Serialized)
-        rescue => e
-          Rails.logger.warn("Error checking multiple field array attribute: #{e.message}")
+        rescue
+          # Rails.logger.warn("Error checking multiple field array attribute: #{e.message}")
           false
         end
 

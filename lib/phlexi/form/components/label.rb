@@ -6,8 +6,10 @@ module Phlexi
       class Label < Base
         def view_template
           label(**attributes) do
-            abbr(title: "required") { "*" } if field.required?
-            whitespace
+            if field.required?
+              abbr(title: "required") { "*" }
+              whitespace
+            end
             plain field.label
           end
         end

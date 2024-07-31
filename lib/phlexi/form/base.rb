@@ -3,6 +3,7 @@
 require "action_view/model_naming"
 require "active_support/core_ext/module/delegation"
 require "active_support/string_inquirer"
+require "active_support/core_ext/object/blank"
 
 module Phlexi
   module Form
@@ -87,7 +88,14 @@ module Phlexi
           @key = record
         else
           @object = convert_to_model(record)
-          @key = options.delete(:as) || object.model_name.param_key
+          @key = options.delete(:as)
+
+          if @key.nil?
+            unless object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key
+              raise ArgumentError, "record must respond to #model_name.param_key with a non nil value"
+            end
+            @key = object.model_name.param_key
+          end
         end
         @key = @key.to_sym
       end
@@ -140,7 +148,7 @@ module Phlexi
       #
       # @return [Boolean] True if the authenticity token should be included, false otherwise
       def authenticity_token?
-        options.fetch(:authenticity_token) { !form_method.get? }
+        defined?(helpers) && options.fetch(:authenticity_token) { !form_method.get? }
       end
 
       # Retrieves the authenticity token.

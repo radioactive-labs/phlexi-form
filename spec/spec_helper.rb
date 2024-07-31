@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-require "superform"
-require "phlex"
+require "phlexi/form"
 require "rails"
-
-::ApplicationComponent = Phlex::HTML
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

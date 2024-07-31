@@ -93,7 +93,7 @@ module Phlexi
         else
           array_to_hash(Array(collection))
         end
-      rescue ArgumentError => e
+      rescue ArgumentError
         # Rails.logger.warn("Unhandled inclusion collection type: #{e}")
         {}
       end

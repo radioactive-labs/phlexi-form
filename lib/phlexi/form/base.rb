@@ -141,7 +141,8 @@ module Phlexi
       #
       # @return [String] The form's CSS classes
       def form_class
-        @form_class || "flex flex-col space-y-6 px-4 py-2"
+        # @form_class || "flex flex-col space-y-6 px-4 py-2"
+        @form_class
       end
 
       # Checks if the authenticity token should be included.

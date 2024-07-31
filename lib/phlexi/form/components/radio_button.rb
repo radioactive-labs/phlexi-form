@@ -17,7 +17,7 @@ module Phlexi
           @checked_value = (attributes.key?(:checked_value) ? attributes.delete(:checked_value) : "1").to_s
 
           # this is a hack to workaround the fact that radio cannot be indexed/multiple
-          attributes[:name] = attributes[:name].sub(/\[]$/, "")
+          attributes[:name] = attributes[:name].sub(/\[\]$/, "")
           attributes[:value] = @checked_value
           attributes[:checked] = attributes.fetch(:checked) { checked? }
         end

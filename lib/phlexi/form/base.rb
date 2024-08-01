@@ -22,7 +22,7 @@ module Phlexi
 
       attr_reader :key, :object
 
-      delegate :field, :nest_one, :nest_many, to: :@namespace
+      delegate :field, :nest_one, :nest_many, :serialize, to: :@namespace
 
       # Initializes a new Form instance.
       #
@@ -82,17 +82,19 @@ module Phlexi
       # @param record [ActiveModel::Model, Symbol, String] The form's associated record or key
       # @return [void]
       def initialize_object_and_key(record)
+        # always pop these keys
+        # add support for `as` to make it more rails friendly
+        @key = options.delete(:key) || options.delete(:as)
+
         case record
         when String, Symbol
           @object = nil
           @key = record
         else
           @object = convert_to_model(record)
-          @key = options.delete(:as)
-
           if @key.nil?
-            unless object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key
-              raise ArgumentError, "record must respond to #model_name.param_key with a non nil value"
+            unless object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key.present?
+              raise ArgumentError, "record must respond to #model_name.param_key with a non nil value or set `key` option e.g. Phlexi::Form(record, key: :record)"
             end
             @key = object.model_name.param_key
           end

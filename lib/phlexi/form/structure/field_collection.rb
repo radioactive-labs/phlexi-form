@@ -26,7 +26,7 @@ module Phlexi
 
             @field.class
               .new("hidden", parent: @field)
-              .input_tag(type: :hidden, value:, hidden: true, autocomplete: "off")
+              .input_tag(type: :hidden, value:)
           end
         end
 

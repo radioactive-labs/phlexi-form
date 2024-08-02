@@ -66,6 +66,8 @@ module Phlexi
             attributes[:step] = attributes.fetch(:step, field.step)
           when :hidden
             attributes.delete(:class)
+            attributes[:hidden] = true
+            attributes[:autocomplete] = "off"
           else
             # Handle any unrecognized input types
             # Rails.logger.warn("Unhandled input type: #{attributes[:type]}")

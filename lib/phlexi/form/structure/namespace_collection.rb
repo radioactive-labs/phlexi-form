@@ -9,7 +9,7 @@ module Phlexi
         def initialize(key, parent:, collection: nil, &)
           super(key, parent: parent)
 
-          @namespaces = enumerate(collection)
+          @collection = collection
           each(&) if block_given?
         end
 
@@ -26,16 +26,17 @@ module Phlexi
         end
 
         def each(&)
-          @namespaces.each(&)
+          namespaces.each(&)
         end
 
         private
 
-        def enumerate(enumerator)
-          Enumerator.new do |y|
-            enumerator.each.with_index do |object, key|
-              y << build_namespace(key, object: object)
-            end
+        # Builds and memoizes namespaces for the collection.
+        #
+        # @return [Array<Hash>] An array of namespace hashes.
+        def namespaces
+          @namespaces ||= @collection.map.with_index do |object, key|
+            build_namespace(key, object: object)
           end
         end
 

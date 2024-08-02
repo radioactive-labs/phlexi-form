@@ -35,7 +35,7 @@ module Phlexi
 
         # Emit the id, name, and value in an HTML tag-ish that doesnt have an element.
         def inspect
-          "<id=#{id.inspect} name=#{name.inspect} value=#{value.inspect}/>"
+          "<#{self.class.name} id=#{id.inspect} name=#{name.inspect} value=#{value.inspect}/>"
         end
 
         private

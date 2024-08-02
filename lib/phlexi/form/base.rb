@@ -3,7 +3,6 @@
 require "action_view/model_naming"
 require "active_support/core_ext/module/delegation"
 require "active_support/string_inquirer"
-require "active_support/core_ext/object/blank"
 
 module Phlexi
   module Form
@@ -17,7 +16,7 @@ module Phlexi
     #
     # @attr_reader [Symbol] key The form's key, derived from the record or explicitly set
     # @attr_reader [ActiveModel::Model, nil] object The form's associated object
-    class Base < BaseComponent
+    class Base < COMPONENT_BASE
       include ActionView::ModelNaming
 
       attr_reader :key, :object

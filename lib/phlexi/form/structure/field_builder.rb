@@ -5,6 +5,13 @@ require "phlex"
 module Phlexi
   module Form
     module Structure
+      # FieldBuilder class is responsible for building form fields with various options and components.
+      #
+      # @attr_reader [Structure::DOM] dom The DOM structure for the field.
+      # @attr_reader [Hash] options Options for the field.
+      # @attr_reader [Object] object The object associated with the field.
+      # @attr_reader [Hash] attributes Attributes for the field.
+      # @attr_accessor [Object] value The value of the field.
       class FieldBuilder < Node
         include Phlex::Helpers
         include FieldOptions::Validators
@@ -29,137 +36,176 @@ module Phlexi
         alias_method :serialize, :value
         alias_method :assign, :value=
 
-
-        # @param attributes [Hash] Default attributes to apply to all fields. Takes priority over inferred attributes.
-        def initialize(key, parent:, object: nil, value: :__i_form_builder_nil_value_i__, attributes: {}, **options)
-          key = :"#{key}"
-          super(key, parent: parent)
+        # Initializes a new FieldBuilder instance.
+        #
+        # @param key [Symbol, String] The key for the field.
+        # @param parent [Structure::Namespace] The parent object.
+        # @param object [Object, nil] The associated object.
+        # @param value [Object] The initial value for the field.
+        # @param attributes [Hash] Default attributes to apply to all fields.
+        # @param options [Hash] Additional options for the field.
+        def initialize(key, parent:, object: nil, value: NIL_VALUE, attributes: {}, **options)
+          super(key.to_sym, parent: parent)
 
           @object = object
-          @value = if value != :__i_form_builder_nil_value_i__
-            value
-          else
-            object.respond_to?(key) ? object.send(key) : nil
-          end
+          @value = determine_initial_value(key, object, value)
           @attributes = attributes
           @options = options
           @dom = Structure::DOM.new(field: self)
         end
 
+        # Creates a label tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the label.
+        # @return [Components::Label] The label component.
         def label_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          label_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :label)
-          Components::Label.new(self, class: label_class, **attributes)
+          create_component(Components::Label, :label, **attributes)
         end
 
+        # Creates an input tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the input.
+        # @return [Components::Input] The input component.
         def input_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          input_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :input)
-          Components::Input.new(self, class: input_class, **attributes)
+          create_component(Components::Input, :input, **attributes)
         end
 
+        # Creates a checkbox tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the checkbox.
+        # @return [Components::Checkbox] The checkbox component.
         def checkbox_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          checkbox_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :checkbox)
-          Components::Checkbox.new(self, class: checkbox_class, **attributes)
+          create_component(Components::Checkbox, :checkbox, **attributes)
         end
 
+        # Creates collection checkboxes for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the collection checkboxes.
+        # @yield [block] The block to be executed for each checkbox.
+        # @return [Components::CollectionCheckboxes] The collection checkboxes component.
         def collection_checkboxes_tag(**attributes, &)
-          attributes = self.attributes.deep_merge(attributes)
-          collection_checkboxes_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :collection_checkboxes)
-          Components::CollectionCheckboxes.new(self, class: collection_checkboxes_class, **attributes, &)
+          create_component(Components::CollectionCheckboxes, :collection_checkboxes, **attributes, &)
         end
 
+        # Creates a radio button tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the radio button.
+        # @return [Components::RadioButton] The radio button component.
         def radio_button_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          radio_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :radio)
-          Components::RadioButton.new(self, class: radio_class, **attributes)
+          create_component(Components::RadioButton, :radio, **attributes)
         end
 
+        # Creates collection radio buttons for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the collection radio buttons.
+        # @yield [block] The block to be executed for each radio button.
+        # @return [Components::CollectionRadioButtons] The collection radio buttons component.
         def collection_radio_buttons_tag(**attributes, &)
-          attributes = self.attributes.deep_merge(attributes)
-          collection_radio_buttons_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :collection_radio_buttons)
-          Components::CollectionRadioButtons.new(self, class: collection_radio_buttons_class, **attributes, &)
+          create_component(Components::CollectionRadioButtons, :collection_radio_buttons, **attributes, &)
         end
 
+        # Creates a textarea tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the textarea.
+        # @return [Components::Textarea] The textarea component.
         def textarea_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          textarea_class = attributes.delete(:class) || themed_input(attributes.delete(:theme) || :textarea)
-          Components::Textarea.new(self, class: textarea_class, **attributes)
+          create_component(Components::Textarea, :textarea, **attributes)
         end
 
+        # Creates a select tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the select.
+        # @return [Components::Select] The select component.
         def select_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          select_class = attributes.delete(:class) || themed_input(attributes.delete(:theme) || :select)
-          Components::Select.new(self, class: select_class, **attributes)
+          create_component(Components::Select, :select, **attributes)
         end
 
+        # Creates a hint tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the hint.
+        # @return [Components::Hint] The hint component.
         def hint_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          hint_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :hint)
-          Components::Hint.new(self, class: hint_class, **attributes)
+          create_component(Components::Hint, :hint, **attributes)
         end
 
+        # Creates an error tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the error.
+        # @return [Components::Error] The error component.
         def error_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          error_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :error)
-          Components::Error.new(self, class: error_class, **attributes)
+          create_component(Components::Error, :error, **attributes)
         end
 
+        # Creates a full error tag for the field.
+        #
+        # @param attributes [Hash] Additional attributes for the full error.
+        # @return [Components::FullError] The full error component.
         def full_error_tag(**attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          error_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :error)
-          Components::FullError.new(self, class: error_class, **attributes)
+          create_component(Components::FullError, :full_error, **attributes)
         end
 
+        # Wraps the field with additional markup.
+        #
+        # @param inner [Hash] Attributes for the inner wrapper.
+        # @param attributes [Hash] Additional attributes for the wrapper.
+        # @yield [block] The block to be executed within the wrapper.
+        # @return [Components::Wrapper] The wrapper component.
         def wrapped(inner: {}, **attributes, &)
           attributes = self.attributes.deep_merge(attributes)
           wrapper_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :wrapper)
           inner[:class] = inner.delete(:class) || themed(inner.delete(:theme) || :inner_wrapper)
-          Components::Wrapper.new(self, class: wrapper_class, inner:, **attributes, &)
+          Components::Wrapper.new(self, class: wrapper_class, inner: inner, **attributes, &)
         end
 
-        # Wraps a field that's an array of values with a bunch of fields
+        # Creates a multi-value field collection.
         #
-        # @example Usage
-        #
-        # ```ruby
-        # Phlexi::Form.new User.new do
-        #   render field(:email).input_tag
-        #   render field(:name).input_tag
-        #   field(:roles).multi([["Admin", "admin"], ["Editor", "editor"]]) do |a|
-        #     render a.label_tag # Admin
-        #     render a.input_tag # => name="user[roles][]" value="admin"
-        #   end
-        # end
-        # ```
-        # The object within the block is a `FieldCollection` object
+        # @param range [Array, nil] The range of values for the collection.
+        # @yield [block] The block to be executed for each item in the collection.
+        # @return [FieldCollection] The field collection.
         def multi(range = nil, &)
           range ||= Array(collection)
-          FieldCollection.new(field: self, range:, &)
+          FieldCollection.new(field: self, range: range, &)
         end
 
         private
 
+        def create_component(component_class, theme_key, **attributes)
+          attributes = self.attributes.deep_merge(attributes)
+          component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+        end
+
+        def component_class_for(theme_key, attributes)
+          attributes.delete(:class) || themed(attributes.delete(:theme) || theme_key)
+        end
+
         def themed(component)
-          tokens(resolve_theme(component), resolve_validity_theme(component)).presence if component
+          return unless component
+
+          tokens(resolve_theme(component), resolve_validity_theme(component)).presence
         end
 
-        def themed_input(input_component)
-          themed(input_component) || themed(:input) if input_component
-        end
+        # Recursively resolves the theme for a given property, handling nested symbol references
+        #
+        # @param property [Symbol, String] The theme property to resolve
+        # @param visited [Set] Set of already visited properties to prevent infinite recursion
+        # @return [String, nil] The resolved theme value or nil if not found
+        def resolve_theme(property, visited = Set.new)
+          return nil if visited.include?(property)
+          visited.add(property)
 
-        def resolve_theme(property)
-          options[property] || theme[property]
+          result = options[property] || theme[property]
+
+          if result.is_a?(Symbol)
+            resolve_theme(result, visited)
+          else
+            result
+          end
         end
 
         def resolve_validity_theme(property)
           validity_property = if has_errors?
-            # Apply invalid class if the object has errors
             :"invalid_#{property}"
-          elsif (object.respond_to?(:persisted?) && object.persisted?) && (object.respond_to?(:errors) && !object.errors.empty?)
-            # The object is persisted, has been validated, and there are errors (not empty), but this field has no errors
-            # Apply valid class
+          elsif object_valid?
             :"valid_#{property}"
           else
             :"neutral_#{property}"
@@ -168,8 +214,13 @@ module Phlexi
           resolve_theme(validity_property)
         end
 
+        def object_valid?
+          object.respond_to?(:persisted?) && object.persisted? &&
+            object.respond_to?(:errors) && !object.errors.empty?
+        end
+
         def theme
-          @theme ||= {
+          @theme ||= options[:theme] || {
             # # label themes
             # label: "md:w-1/6 mt-2 block mb-2 text-sm font-medium",
             # invalid_label: "text-red-700 dark:text-red-500",
@@ -187,13 +238,21 @@ module Phlexi
             # # wrapper themes
             # wrapper: "flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-2 mb-4",
             # inner_wrapper: "md:w-5/6 w-full",
-          }.freeze
+            }.freeze
         end
 
-        def reflection = nil
+        def reflection
+          nil
+        end
 
         def has_value?
           value.present?
+        end
+
+        def determine_initial_value(key, object, value)
+          return value unless value == NIL_VALUE
+
+          object.respond_to?(key) ? object.public_send(key) : nil
         end
       end
     end

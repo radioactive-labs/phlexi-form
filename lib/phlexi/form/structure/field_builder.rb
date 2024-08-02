@@ -120,6 +120,10 @@ module Phlexi
           create_component(Components::Select, :select, **attributes)
         end
 
+        def input_array_tag(**attributes)
+          create_component(Components::InputArray, :array, **attributes)
+        end
+
         # Creates a hint tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the hint.
@@ -159,11 +163,10 @@ module Phlexi
 
         # Creates a multi-value field collection.
         #
-        # @param range [Array, nil] The range of values for the collection.
+        # @param range [Integer, #to_a] The range of keys for each field. If an integer is passed, keys will begin from 1.
         # @yield [block] The block to be executed for each item in the collection.
         # @return [FieldCollection] The field collection.
         def multi(range = nil, &)
-          range ||= Array(collection)
           FieldCollection.new(field: self, range: range, &)
         end
 
@@ -175,7 +178,7 @@ module Phlexi
         end
 
         def component_class_for(theme_key, attributes)
-          attributes.delete(:class) || themed(attributes.delete(:theme) || theme_key)
+          attributes.delete(:class) || themed(attributes.key?(:theme) ? attributes.delete(:theme) : theme_key)
         end
 
         def themed(component)
@@ -190,7 +193,7 @@ module Phlexi
         # @param visited [Set] Set of already visited properties to prevent infinite recursion
         # @return [String, nil] The resolved theme value or nil if not found
         def resolve_theme(property, visited = Set.new)
-          return nil if visited.include?(property)
+          return nil if !property.present? || visited.include?(property)
           visited.add(property)
 
           result = options[property] || theme[property]
@@ -220,7 +223,11 @@ module Phlexi
         end
 
         def theme
-          @theme ||= options[:theme] || {
+          @theme ||= options[:theme] || default_theme
+        end
+
+        def default_theme
+          {
             # # label themes
             # label: "md:w-1/6 mt-2 block mb-2 text-sm font-medium",
             # invalid_label: "text-red-700 dark:text-red-500",
@@ -238,7 +245,7 @@ module Phlexi
             # # wrapper themes
             # wrapper: "flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-2 mb-4",
             # inner_wrapper: "md:w-5/6 w-full",
-            }.freeze
+          }.freeze
         end
 
         def reflection

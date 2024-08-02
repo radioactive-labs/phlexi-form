@@ -22,7 +22,7 @@ module Phlexi
 
       attr_reader :key, :object
 
-      delegate :field, :nest_one, :nest_many, :serialize, to: :@namespace
+      delegate :field, :nest_one, :nest_many, :serialize, :assign, to: :@namespace
 
       # Initializes a new Form instance.
       #

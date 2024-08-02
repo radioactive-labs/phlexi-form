@@ -44,7 +44,7 @@ module Phlexi
         # end
         # ```
         def nest_one(key, object: nil, &)
-          object ||= object_for(key: key)
+          object ||= object_value_for(key: key)
           create_child(key, self.class, object:, builder_klass:, &)
         end
 
@@ -65,7 +65,7 @@ module Phlexi
         # The object within the block is a `Namespace` object that maps each object within the enumerable
         # to another `Namespace` or `Field`.
         def nest_many(key, collection: nil, &)
-          collection ||= Array(object_for(key: key))
+          collection ||= Array(object_value_for(key: key))
           create_child(key, NamespaceCollection, collection:, &)
         end
 
@@ -87,6 +87,7 @@ module Phlexi
 
         # Assigns a hash to the current namespace and children namespace.
         def assign(hash)
+          hash = hash.presence || {}
           each do |child|
             child.assign hash[child.key]
           end
@@ -106,7 +107,7 @@ module Phlexi
         #
         # This method could be overwritten if the mapping between the `@object` and `key` name is not
         # a method call. For example, a `Hash` would be accessed via `user[:email]` instead of `user.send(:email)`
-        def object_for(key:)
+        def object_value_for(key:)
           @object.send(key) if @object.respond_to? key
         end
 

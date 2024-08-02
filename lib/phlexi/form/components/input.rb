@@ -15,6 +15,7 @@ module Phlexi
 
           # only overwrite id if it was set in Base
           attributes[:id] = field.dom.id if attributes[:id] == "#{field.dom.id}_#{component_name}"
+
           attributes[:name] = field.dom.name
           attributes[:value] = field.dom.value
 

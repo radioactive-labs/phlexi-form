@@ -64,6 +64,8 @@ module Phlexi
             attributes[:min] = attributes.fetch(:min, field.min)
             attributes[:max] = attributes.fetch(:max, field.max)
             attributes[:step] = attributes.fetch(:step, field.step)
+          when :hidden
+            attributes.delete(:class)
           else
             # Handle any unrecognized input types
             # Rails.logger.warn("Unhandled input type: #{attributes[:type]}")

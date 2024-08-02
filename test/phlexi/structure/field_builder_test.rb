@@ -104,39 +104,46 @@ module Phlexi
         end
 
         def test_direct_theme_resolution
-          theme = { input: "input", custom_input: "custom-input" }
+          theme = {input: "input", custom_input: "custom-input"}
           field = create_field_with_theme(theme)
           assert_equal "input", field.send(:resolve_theme, :input)
         end
 
         def test_single_level_theme_recursion
-          theme = { input: :custom_input, custom_input: "custom-input" }
+          theme = {input: :custom_input, custom_input: "custom-input"}
           field = create_field_with_theme(theme)
           assert_equal "custom-input", field.send(:resolve_theme, :input)
         end
 
         def test_circular_theme_reference
-          theme = { input: :custom_input, custom_input: :input }
+          theme = {input: :custom_input, custom_input: :input}
           field = create_field_with_theme(theme)
           assert_nil field.send(:resolve_theme, :input)
         end
 
         def test_multi_level_theme_recursion
-          theme = { input: :level1, level1: :level2, level2: "final-value" }
+          theme = {input: :level1, level1: :level2, level2: "final-value"}
           field = create_field_with_theme(theme)
           assert_equal "final-value", field.send(:resolve_theme, :input)
         end
 
         def test_theme_resolution_with_missing_key
-          theme = { other_key: "value" }
+          theme = {other_key: "value"}
           field = create_field_with_theme(theme)
           assert_nil field.send(:resolve_theme, :input)
         end
 
         def test_theme_resolution_with_non_symbol_intermediate_value
-          theme = { input: "intermediate", intermediate: "final-value" }
+          theme = {input: "intermediate", intermediate: "final-value"}
           field = create_field_with_theme(theme)
           assert_equal "intermediate", field.send(:resolve_theme, :input)
+        end
+
+        def test_theme_resolution_with_falsey
+          field = create_field_with_theme({})
+          assert_nil field.send(:resolve_theme, false)
+          assert_nil field.send(:resolve_theme, nil)
+          assert_nil field.send(:resolve_theme, 0)
         end
 
         private

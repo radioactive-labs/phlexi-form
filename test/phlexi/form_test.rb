@@ -28,6 +28,7 @@ module Phlexi
         name: {first: "Brad", last: "Gessler", admin: true},
         admin: true,
         nicknames: ["Brad", "Bradley"],
+        location: {lat: "new_lat"},
         addresses: [
           {street: "Main St", city: "Salem"},
           {street: "Wall St", city: "New York", state: "New York", admin: true},
@@ -87,23 +88,28 @@ module Phlexi
     end
 
     def test_form_renders_all_field_types
-      expected = Phlexi::Form(@user) do
+      html_string = Phlexi::Form(@user) do
         render field(:field).label_tag
         render field(:field).input_tag
         render field(:textarea).textarea_tag
         render field(:select).select_tag
         render field(:checkbox).checkbox_tag
         render field(:radio).radio_button_tag
-        render field(:collection_checkboxes, collection: 1..5).collection_checkboxes_tag
-        render field(:collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
+        render field(:collection_checkboxes, collection: 1..2).collection_checkboxes_tag
+        render field(:collection_radio_buttons, collection: 1..2).collection_radio_buttons_tag
+        render field(:input_array, value: 1..2).input_array_tag
       end.call
-      assert_equal expected, "<form method=\"post\" accept-charset=\"UTF-8\"><label class=\"label optional\" id=\"user_field_label\" for=\"user_field\">Field</label><input class=\"input optional\" id=\"user_field\" name=\"user[field]\" value=\"\" type=\"text\"><textarea class=\"textarea optional\" id=\"user_textarea\" name=\"user[textarea]\"></textarea><select class=\"select optional\" id=\"user_select\" name=\"user[select]\"><option selected></option></select><input type=\"hidden\" name=\"user[checkbox]\" value=\"0\" autocomplete=\"off\" hidden><input class=\"checkbox optional\" id=\"user_checkbox\" name=\"user[checkbox]\" value=\"1\" type=\"checkbox\"><input class=\"radio_button optional\" id=\"user_radio\" name=\"user[radio]\" value=\"1\" type=\"radio\"><input class=\"input optional\" type=\"hidden\" value=\"\" hidden autocomplete=\"off\" id=\"user_collection_checkboxes\" name=\"user[collection_checkboxes][]\"><input class=\"checkbox optional\" id=\"user_collection_checkboxes_1\" name=\"user[collection_checkboxes][]\" value=\"1\" type=\"checkbox\"><label class=\"label 1 optional\" checked-value=\"1\" id=\"user_collection_checkboxes_1_label\" for=\"user_collection_checkboxes_1\">1</label><input class=\"checkbox optional\" id=\"user_collection_checkboxes_2\" name=\"user[collection_checkboxes][]\" value=\"2\" type=\"checkbox\"><label class=\"label 2 optional\" checked-value=\"2\" id=\"user_collection_checkboxes_2_label\" for=\"user_collection_checkboxes_2\">2</label><input class=\"checkbox optional\" id=\"user_collection_checkboxes_3\" name=\"user[collection_checkboxes][]\" value=\"3\" type=\"checkbox\"><label class=\"label 3 optional\" checked-value=\"3\" id=\"user_collection_checkboxes_3_label\" for=\"user_collection_checkboxes_3\">3</label><input class=\"checkbox optional\" id=\"user_collection_checkboxes_4\" name=\"user[collection_checkboxes][]\" value=\"4\" type=\"checkbox\"><label class=\"label 4 optional\" checked-value=\"4\" id=\"user_collection_checkboxes_4_label\" for=\"user_collection_checkboxes_4\">4</label><input class=\"checkbox optional\" id=\"user_collection_checkboxes_5\" name=\"user[collection_checkboxes][]\" value=\"5\" type=\"checkbox\"><label class=\"label 5 optional\" checked-value=\"5\" id=\"user_collection_checkboxes_5_label\" for=\"user_collection_checkboxes_5\">5</label><input class=\"input optional\" type=\"hidden\" value=\"\" hidden autocomplete=\"off\" id=\"user_collection_radio_buttons\" name=\"user[collection_radio_buttons]\"><input class=\"radio_button optional\" id=\"user_collection_radio_buttons_1\" name=\"user[collection_radio_buttons]\" value=\"1\" type=\"radio\"><label class=\"label 1 optional\" checked-value=\"1\" id=\"user_collection_radio_buttons_1_label\" for=\"user_collection_radio_buttons_1\">1</label><input class=\"radio_button optional\" id=\"user_collection_radio_buttons_2\" name=\"user[collection_radio_buttons]\" value=\"2\" type=\"radio\"><label class=\"label 2 optional\" checked-value=\"2\" id=\"user_collection_radio_buttons_2_label\" for=\"user_collection_radio_buttons_2\">2</label><input class=\"radio_button optional\" id=\"user_collection_radio_buttons_3\" name=\"user[collection_radio_buttons]\" value=\"3\" type=\"radio\"><label class=\"label 3 optional\" checked-value=\"3\" id=\"user_collection_radio_buttons_3_label\" for=\"user_collection_radio_buttons_3\">3</label><input class=\"radio_button optional\" id=\"user_collection_radio_buttons_4\" name=\"user[collection_radio_buttons]\" value=\"4\" type=\"radio\"><label class=\"label 4 optional\" checked-value=\"4\" id=\"user_collection_radio_buttons_4_label\" for=\"user_collection_radio_buttons_4\">4</label><input class=\"radio_button optional\" id=\"user_collection_radio_buttons_5\" name=\"user[collection_radio_buttons]\" value=\"5\" type=\"radio\"><label class=\"label 5 optional\" checked-value=\"5\" id=\"user_collection_radio_buttons_5_label\" for=\"user_collection_radio_buttons_5\">5</label></form>"
+      expected = '<form method="post" accept-charset="UTF-8"><label class="label optional" id="user_field_label" for="user_field">Field</label><input class="input optional" id="user_field" name="user[field]" value="" type="text"><textarea class="textarea optional" id="user_textarea" name="user[textarea]"></textarea><select class="select optional" id="user_select" name="user[select]"><option selected></option></select><input type="hidden" name="user[checkbox]" value="0" autocomplete="off" hidden><input class="checkbox optional" id="user_checkbox" name="user[checkbox]" value="1" type="checkbox"><input class="radio_button optional" id="user_radio" name="user[radio]" value="1" type="radio"><div id="user_collection_checkboxes_collection_checkboxes" class="collection_checkboxes optional"><input type="hidden" value="" hidden autocomplete="off" id="user_collection_checkboxes_hidden" name="user[collection_checkboxes][]"><input class="checkbox optional" id="user_collection_checkboxes_1" name="user[collection_checkboxes][]" value="1" type="checkbox"><label class="label 1 optional" checked-value="1" id="user_collection_checkboxes_1_label" for="user_collection_checkboxes_1">1</label><input class="checkbox optional" id="user_collection_checkboxes_2" name="user[collection_checkboxes][]" value="2" type="checkbox"><label class="label 2 optional" checked-value="2" id="user_collection_checkboxes_2_label" for="user_collection_checkboxes_2">2</label></div><div id="user_collection_radio_buttons_collection_radio_buttons" class="collection_radio_buttons optional"><input type="hidden" value="" hidden autocomplete="off" id="user_collection_radio_buttons_hidden" name="user[collection_radio_buttons][]"><input class="radio_button optional" id="user_collection_radio_buttons_1" name="user[collection_radio_buttons]" value="1" type="radio"><label class="label 1 optional" checked-value="1" id="user_collection_radio_buttons_1_label" for="user_collection_radio_buttons_1">1</label><input class="radio_button optional" id="user_collection_radio_buttons_2" name="user[collection_radio_buttons]" value="2" type="radio"><label class="label 2 optional" checked-value="2" id="user_collection_radio_buttons_2_label" for="user_collection_radio_buttons_2">2</label></div><div id="user_input_array_input_array" class="input_array optional"><input type="hidden" value="" hidden autocomplete="off" id="user_input_array_hidden" name="user[input_array][]"><input class="input optional" id="user_input_array_1" name="user[input_array][]" value="1" type="text"><input class="input optional" id="user_input_array_2" name="user[input_array][]" value="2" type="text"></div></form>'
+      assert_equal expected, html_string
     end
 
     def test_that_form_assigns
       form = Phlexi::Form(@user) {
         field(:name) do |name|
           render name.input_tag
+        end
+        field(:nicknames) do |name|
+          render name.input_array_tag
         end
         nest_one(:location) do |location|
           render location.field(:lat).input_tag
@@ -116,13 +122,14 @@ module Phlexi
       }
       form.call
 
-      original_hash = {name: "William Bills", location: {lat: "lat", lng: "lng"},
+      original_hash = {name: "William Bills", location: {lat: "lat", lng: "lng"}, :nicknames=>["Bill", "Billy", "Will"],
                        addresses: [{street: "Birch Ave", city: "Williamsburg"}, {street: "Main St", city: "Salem"}]}
       assert_equal original_hash, form.serialize
 
       form.assign @params
 
-      assigned_hash = {name: {first: "Brad", last: "Gessler", admin: true}, location: {lat: nil, lng: nil},
+      assigned_hash = {name: {first: "Brad", last: "Gessler", admin: true}, :nicknames=>["Brad", "Bradley"],
+                       location: {lat: "new_lat", lng: nil},
                        addresses: [{street: "Main St", city: "Salem"}, {street: "Wall St", city: "New York"}]}
       assert_equal assigned_hash, form.serialize
     end

@@ -4,6 +4,8 @@ module Phlexi
   module Form
     module Components
       class Input < Base
+        include Concerns::HandlesInput
+
         def view_template
           input(**attributes)
         end
@@ -23,7 +25,7 @@ module Phlexi
         end
 
         def build_input_attributes
-          attributes[:type] = attributes.fetch(:type, field.input_type)
+          attributes[:type] = attributes.fetch(:type, field.inferred_input_type)
           attributes[:disabled] = attributes.fetch(:disabled, field.disabled?)
 
           case attributes[:type]

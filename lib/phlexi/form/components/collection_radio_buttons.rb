@@ -5,6 +5,7 @@ module Phlexi
     module Components
       class CollectionRadioButtons < Base
         include Concerns::HasOptions
+        include Concerns::HandlesInput
 
         def view_template
           div(**attributes.slice(:id, :class)) do

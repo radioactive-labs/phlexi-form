@@ -69,13 +69,16 @@ module Phlexi
           create_child(key, NamespaceCollection, collection:, &)
         end
 
-        # Creates a Hash of Hashes and Arrays that represent the fields and collections of the Superform.
-        # This can be used to safely update ActiveRecord objects without the need for Strong Parameters.
-        # You will want to make sure that all the fields displayed in the form are ones that you're OK updating
-        # from the generated hash.
-        def serialize
-          each_with_object({}) do |child, hash|
-            hash[child.key] = child.serialize
+        def extract_input(params)
+          if params.is_a?(Array)
+            each_with_object({}) do |child, hash|
+              hash.merge! child.extract_input(params[0])
+            end
+          else
+            input = each_with_object({}) do |child, hash|
+              hash.merge! child.extract_input(params[key])
+            end
+            {key => input}
           end
         end
 
@@ -83,15 +86,6 @@ module Phlexi
         # objects.
         def each(&)
           @children.values.each(&)
-        end
-
-        # Assigns a hash to the current namespace and children namespace.
-        def assign(hash)
-          hash = hash.presence || {}
-          each do |child|
-            child.assign hash[child.key]
-          end
-          self
         end
 
         # Creates a root Namespace, which is essentially a form.

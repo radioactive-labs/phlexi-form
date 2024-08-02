@@ -83,15 +83,10 @@ module Phlexi
           assert_instance_of Components::Error, error
         end
 
-        def test_value_assignment
+        def test_input_extraction
           field = FieldBuilder.new(:name, parent: @parent, object: @object)
-          field.assign("New Name")
-          assert_equal "New Name", field.value
-        end
-
-        def test_serialization
-          field = FieldBuilder.new(:name, parent: @parent, object: @object)
-          assert_equal "Test User", field.serialize
+          field.input_tag
+          assert_equal({name: "Test User"}, field.extract_input({name: "Test User"}))
         end
 
         def test_wrapped

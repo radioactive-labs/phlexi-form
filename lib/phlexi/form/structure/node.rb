@@ -9,7 +9,7 @@ module Phlexi
         attr_reader :key, :parent
 
         def initialize(key, parent:)
-          @key = key.to_sym
+          @key = key.to_s.to_sym
           @parent = parent
         end
       end

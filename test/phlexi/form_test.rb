@@ -23,19 +23,6 @@ module Phlexi
           OpenStruct.new(street: "Main St", city: "Salem")
         ]
       )
-
-      @params = {
-        name: {first: "Brad", last: "Gessler", admin: true},
-        admin: true,
-        nicknames: ["Brad", "Bradley"],
-        location: {lat: "new_lat"},
-        addresses: [
-          {street: "Main St", city: "Salem"},
-          {street: "Wall St", city: "New York", state: "New York", admin: true},
-          {street: "Wall", city: "York", state: "New York", admin: true}
-        ],
-        one: {two: {three: {four: 100}}}
-      }
     end
 
     def test_that_complex_form_renders
@@ -103,8 +90,8 @@ module Phlexi
       assert_equal expected, html_string
     end
 
-    def test_that_form_assigns
-      form = Phlexi::Form(@user) {
+    def test_that_form_extracts_inputs
+      form = Phlexi::Form(:user) {
         field(:name) do |name|
           render name.input_tag
         end
@@ -122,16 +109,33 @@ module Phlexi
       }
       form.call
 
-      original_hash = {name: "William Bills", location: {lat: "lat", lng: "lng"}, :nicknames=>["Bill", "Billy", "Will"],
-                       addresses: [{street: "Birch Ave", city: "Williamsburg"}, {street: "Main St", city: "Salem"}]}
-      assert_equal original_hash, form.serialize
-
-      form.assign @params
-
-      assigned_hash = {name: {first: "Brad", last: "Gessler", admin: true}, :nicknames=>["Brad", "Bradley"],
-                       location: {lat: "new_lat", lng: nil},
-                       addresses: [{street: "Main St", city: "Salem"}, {street: "Wall St", city: "New York"}]}
-      assert_equal assigned_hash, form.serialize
+      params = {
+        user: {
+          name: "Brad Gessler",
+          admin: true,
+          nicknames: ["Brad", "Bradley"],
+          location: {lat: "new_lat"},
+          addresses: [
+            {street: "Main St", city: "Salem"},
+            {street: "Wall St", city: :"New York", state: "New York", admin: true},
+            {street: "Acme St", city: "", state: "New York", admin: true}
+          ],
+          one: {two: {three: {four: 100}}}
+        }
+      }
+      expected_extracted_params = {
+        user: {
+          name: "Brad Gessler",
+          nicknames: ["Brad", "Bradley"],
+          location: {lat: "new_lat", lng: nil},
+          addresses: [
+            {street: "Main St", city: "Salem"},
+            {street: "Wall St", city: "New York"},
+            {street: "Acme St", city: nil}
+          ],
+        }
+      }
+      assert_equal expected_extracted_params, form.extract_input(params)
     end
 
     private

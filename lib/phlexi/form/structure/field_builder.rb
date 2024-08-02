@@ -18,7 +18,7 @@ module Phlexi
         include FieldOptions::Labels
         include FieldOptions::Hints
         include FieldOptions::Errors
-        include FieldOptions::Type
+        include FieldOptions::InferredTypes
         include FieldOptions::Collection
         include FieldOptions::Placeholder
         include FieldOptions::Required
@@ -31,10 +31,7 @@ module Phlexi
         include FieldOptions::Multiple
         include FieldOptions::Limit
 
-        attr_reader :dom, :options, :object, :attributes
-        attr_accessor :value
-        alias_method :serialize, :value
-        alias_method :assign, :value=
+        attr_reader :dom, :options, :object, :attributes, :value
 
         # Initializes a new FieldBuilder instance.
         #
@@ -170,11 +167,25 @@ module Phlexi
           FieldCollection.new(field: self, range: range, &)
         end
 
+        def extract_input(params)
+          raise "field##{dom.name} did not define an input component" unless @field_input_component
+
+          @field_input_component.extract_input(params)
+        end
+
         private
 
         def create_component(component_class, theme_key, **attributes)
           attributes = self.attributes.deep_merge(attributes)
-          component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+          component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+          if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
+            if @field_input_component
+              raise "input component already defined: #{@field_input_component.inspect}"
+            else
+              @field_input_component = component
+            end
+          end
+          component
         end
 
         def component_class_for(theme_key, attributes)

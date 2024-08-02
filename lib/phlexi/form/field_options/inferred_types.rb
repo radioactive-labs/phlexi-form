@@ -5,17 +5,17 @@ require "bigdecimal"
 module Phlexi
   module Form
     module FieldOptions
-      module Type
-        def db_type
-          @db_type ||= infer_db_type
+      module InferredTypes
+        def inferred_db_type
+          @inferred_db_type ||= infer_db_type
         end
 
-        def input_component
-          @input_component ||= infer_input_component
+        def inferred_input_component
+          @inferred_input_component ||= infer_input_component
         end
 
-        def input_type
-          @input_type ||= infer_input_type
+        def inferred_input_type
+          @inferred_input_type ||= infer_input_type(inferred_input_component)
         end
 
         private
@@ -25,7 +25,7 @@ module Phlexi
         def infer_input_component
           return :select unless collection.blank?
 
-          case db_type
+          case inferred_db_type
           when :text, :json, :jsonb, :hstore
             :textarea
           else
@@ -35,10 +35,8 @@ module Phlexi
 
         # this only applies when input_component is `:input`
         # resolves the type attribute of input components
-        def infer_input_type
-          return nil unless input_component == :input
-
-          case db_type
+        def infer_input_type(component)
+          case inferred_db_type
           when :string
             infer_string_input_type(key)
           when :integer, :float, :decimal

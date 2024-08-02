@@ -5,6 +5,8 @@ module Phlexi
     module Components
       class CollectionCheckboxes < Base
         include Concerns::HasOptions
+        include Concerns::HandlesInput
+        include Concerns::HandlesArrayInput
 
         def view_template
           div(**attributes.slice(:id, :class)) do

@@ -5,6 +5,8 @@ module Phlexi
     module Components
       class Select < Base
         include Concerns::HasOptions
+        include Concerns::HandlesInput
+        include Concerns::HandlesArrayInput
 
         def view_template(&block)
           select(**attributes) do
@@ -14,6 +16,10 @@ module Phlexi
         end
 
         protected
+
+        def normalize_input(input_hash)
+          attributes[:multiple] ? normalize_array_input(input_hash) : super
+        end
 
         def options
           option_mapper.each do |value, label|

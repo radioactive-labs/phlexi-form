@@ -4,6 +4,9 @@ module Phlexi
   module Form
     module Components
       class InputArray < Base
+        include Concerns::HandlesInput
+        include Concerns::HandlesArrayInput
+
         def view_template
           div(**attributes.slice(:id, :class)) do
             field.multi(values.length) do |builder|
@@ -21,6 +24,14 @@ module Phlexi
               end
             end
           end
+        end
+
+        protected
+
+        def build_attributes
+          super
+
+          attributes[:multiple] = true
         end
 
         private

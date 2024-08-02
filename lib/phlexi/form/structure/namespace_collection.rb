@@ -6,30 +6,29 @@ module Phlexi
       class NamespaceCollection < Node
         include Enumerable
 
-        def initialize(key, parent:, collection: nil, &)
+        def initialize(key, parent:, collection: nil, &block)
+          raise ArgumentError, "block is required" unless block.present?
+
           super(key, parent: parent)
 
           @collection = collection
-          each(&) if block_given?
+          @block = block
+          each(&block)
         end
 
-        def serialize
-          map(&:serialize)
+        def extract_input(params)
+          namespace = build_namespace(0)
+          @block.call(namespace)
+
+          inputs = params[key].map { |param| namespace.extract_input([param]) }
+          {key => inputs}
         end
 
-        def assign(array)
-          # The problem with zip-ing the array is if I need to add new
-          # elements to it and wrap it in the namespace.
-          zip(array) do |namespace, hash|
-            namespace.assign hash
-          end
-        end
+        private
 
         def each(&)
           namespaces.each(&)
         end
-
-        private
 
         # Builds and memoizes namespaces for the collection.
         #

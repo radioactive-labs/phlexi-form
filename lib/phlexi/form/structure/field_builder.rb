@@ -45,10 +45,10 @@ module Phlexi
         # @param attributes [Hash] Default attributes to apply to all fields.
         # @param options [Hash] Additional options for the field.
         def initialize(key, parent:, object: nil, value: NIL_VALUE, attributes: {}, **options)
-          super(key.to_sym, parent: parent)
+          super(key, parent: parent)
 
           @object = object
-          @value = determine_initial_value(key, object, value)
+          @value = determine_initial_value(object, value)
           @attributes = attributes
           @options = options
           @dom = Structure::DOM.new(field: self)
@@ -256,7 +256,7 @@ module Phlexi
           value.present?
         end
 
-        def determine_initial_value(key, object, value)
+        def determine_initial_value(object, value)
           return value unless value == NIL_VALUE
 
           object.respond_to?(key) ? object.public_send(key) : nil

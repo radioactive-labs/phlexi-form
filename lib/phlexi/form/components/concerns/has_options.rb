@@ -26,6 +26,10 @@ module Phlexi
               field.dom.value == option.to_s
             end
           end
+
+          def normalize_input_value(input_value)
+            ([super] & option_mapper.values)[0]
+          end
         end
       end
     end

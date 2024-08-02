@@ -33,6 +33,10 @@ module Phlexi
           end
 
           def normalize_input(input_hash)
+            normalize_simple_input(input_hash)
+          end
+
+          def normalize_simple_input(input_hash)
             input_hash.transform_values{ |value| normalize_input_value(value) }
           end
 

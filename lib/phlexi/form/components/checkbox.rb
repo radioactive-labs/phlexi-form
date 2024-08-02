@@ -37,6 +37,11 @@ module Phlexi
             field.dom.value == @checked_value
           end
         end
+
+        def normalize_input_value(input_value)
+          input_value = super
+          [@checked_value, @unchecked_value].include?(input_value) ? input_value : @unchecked_value
+        end
       end
     end
   end

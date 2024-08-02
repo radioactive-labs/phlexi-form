@@ -4,9 +4,9 @@ module Phlexi
   module Form
     module Components
       class Select < Base
-        include Concerns::HasOptions
         include Concerns::HandlesInput
         include Concerns::HandlesArrayInput
+        include Concerns::HasOptions
 
         def view_template(&block)
           select(**attributes) do
@@ -16,10 +16,6 @@ module Phlexi
         end
 
         protected
-
-        def normalize_input(input_hash)
-          attributes[:multiple] ? normalize_array_input(input_hash) : super
-        end
 
         def options
           option_mapper.each do |value, label|
@@ -56,6 +52,10 @@ module Phlexi
 
         def skip_blank_option?
           @include_blank_option == false
+        end
+
+        def normalize_input(input_hash)
+          attributes[:multiple] ? normalize_array_input(input_hash) : normalize_simple_input(input_hash)
         end
       end
     end

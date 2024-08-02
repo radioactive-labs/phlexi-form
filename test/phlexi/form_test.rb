@@ -106,6 +106,22 @@ module Phlexi
           render address.field(:street).input_tag
           render address.field(:city).input_tag
         end
+
+        render field(:checked_checkbox).checkbox_tag
+        render field(:unchecked_checkbox).checkbox_tag
+        render field(:invalid_checkbox).checkbox_tag
+
+        render field(:checked_radio).radio_button_tag
+        render field(:unchecked_radio).radio_button_tag
+        render field(:invalid_radio).radio_button_tag
+
+        render field(:select).select_tag(collection: 1..5)
+        render field(:invalid_select).select_tag(collection: 1..5)
+        render field(:multi_select).select_tag(collection: 1..5, multiple: true)
+
+        render field(:collection_checkboxes, collection: 1..5).collection_checkboxes_tag
+        render field(:collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
+        render field(:invalid_collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
       }
       form.call
 
@@ -113,14 +129,20 @@ module Phlexi
         user: {
           name: "Brad Gessler",
           admin: true,
-          nicknames: ["Brad", "Bradley"],
+          nicknames: ["Brad", :Bradley],
           location: {lat: "new_lat"},
           addresses: [
             {street: "Main St", city: "Salem"},
             {street: "Wall St", city: :"New York", state: "New York", admin: true},
             {street: "Acme St", city: "", state: "New York", admin: true}
           ],
-          one: {two: {three: {four: 100}}}
+          one: {two: {three: {four: 100}}},
+          checked_checkbox: "1", unchecked_checkbox: "0", invalid_checkbox: "0",
+          checked_radio: "1", unchecked_radio: nil, invalid_radio: "8",
+          select: "4", invalid_select: "7", multi_select: [1,2,5,6,7, nil, ""],
+          collection_checkboxes: ["1", 2, "6", 7],
+          collection_radio_buttons: "1",
+          invalid_collection_radio_buttons: "6"
         }
       }
       expected_extracted_params = {
@@ -133,6 +155,12 @@ module Phlexi
             {street: "Wall St", city: "New York"},
             {street: "Acme St", city: nil}
           ],
+          checked_checkbox: "1", unchecked_checkbox: "0", invalid_checkbox: "0",
+          checked_radio: "1",
+          select: "4", invalid_select: nil, multi_select: ["1","2","5"],
+          collection_checkboxes: ["1", "2"],
+          collection_radio_buttons: "1",
+          invalid_collection_radio_buttons: nil
         }
       }
       assert_equal expected_extracted_params, form.extract_input(params)

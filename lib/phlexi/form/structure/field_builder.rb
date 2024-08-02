@@ -29,6 +29,8 @@ module Phlexi
         alias_method :serialize, :value
         alias_method :assign, :value=
 
+
+        # @param attributes [Hash] Default attributes to apply to all fields. Takes priority over inferred attributes.
         def initialize(key, parent:, object: nil, value: :__i_form_builder_nil_value_i__, attributes: {}, **options)
           key = :"#{key}"
           super(key, parent: parent)
@@ -126,8 +128,8 @@ module Phlexi
         #   render field(:email).input_tag
         #   render field(:name).input_tag
         #   field(:roles).multi([["Admin", "admin"], ["Editor", "editor"]]) do |a|
-        #     render a.label_tag
-        #     render a.input_tag # => name="user[roles][]"
+        #     render a.label_tag # Admin
+        #     render a.input_tag # => name="user[roles][]" value="admin"
         #   end
         # end
         # ```

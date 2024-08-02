@@ -15,10 +15,10 @@ module Phlexi
 
         attr_reader :builder_klass, :object
 
-        def initialize(key, parent:, object: nil, builder_klass: Field)
+        def initialize(key, parent:, builder_klass:, object: nil)
           super(key, parent: parent)
-          @object = object
           @builder_klass = builder_klass
+          @object = object
           @children = {}
           yield self if block_given?
         end
@@ -95,8 +95,8 @@ module Phlexi
         end
 
         # Creates a root Namespace, which is essentially a form.
-        def self.root(*, **, &)
-          new(*, parent: nil, **, &)
+        def self.root(*, builder_klass:, **, &)
+          new(*, parent: nil, builder_klass:, **, &)
         end
 
         protected

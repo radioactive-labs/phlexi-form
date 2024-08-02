@@ -2,6 +2,7 @@
 
 require "zeitwerk"
 require "phlex"
+require "active_support/core_ext/object/blank"
 
 module Phlexi
   module Form
@@ -17,7 +18,9 @@ module Phlexi
       loader.setup
     end
 
-    BaseComponent = (defined?(::ApplicationComponent) ? ::ApplicationComponent : Phlex::HTML)
+    COMPONENT_BASE = (defined?(::ApplicationComponent) ? ::ApplicationComponent : Phlex::HTML)
+
+    NIL_VALUE = :__i_phlexi_form_nil_value_i__
 
     class Error < StandardError; end
   end

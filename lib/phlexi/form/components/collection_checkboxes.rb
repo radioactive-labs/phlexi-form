@@ -11,6 +11,7 @@ module Phlexi
           field.multi(option_mapper.values) do |builder|
             field = builder.field(
               label: option_mapper[builder.key],
+              # We set the attributes here so they are applied to all components even if the user decides to use a block
               attributes: {
                 checked_value: builder.key,
                 include_hidden: false

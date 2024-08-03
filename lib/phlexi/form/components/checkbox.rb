@@ -38,7 +38,7 @@ module Phlexi
           end
         end
 
-        def normalize_input_value(input_value)
+        def normalize_input_value(...)
           input_value = super
           [@checked_value, @unchecked_value].include?(input_value) ? input_value : @unchecked_value
         end

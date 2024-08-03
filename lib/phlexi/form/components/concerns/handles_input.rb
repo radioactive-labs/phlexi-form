@@ -37,7 +37,7 @@ module Phlexi
           end
 
           def normalize_simple_input(input_hash)
-            input_hash.transform_values{ |value| normalize_input_value(value) }
+            input_hash.transform_values { |value| normalize_input_value(value) }
           end
 
           def normalize_input_value(input_value)

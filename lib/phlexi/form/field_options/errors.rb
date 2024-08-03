@@ -76,6 +76,16 @@ module Phlexi
         def has_custom_error?
           options[:error].is_a?(String)
         end
+
+        # Determines if the associated object is in a valid state
+        #
+        # An object is considered valid if it is persisted and has no errors.
+        #
+        # @return [Boolean] true if the object is persisted and has no errors, false otherwise
+        def object_valid?
+          object.respond_to?(:persisted?) && object.persisted? &&
+            object.respond_to?(:errors) && !object.errors.empty?
+        end
       end
     end
   end

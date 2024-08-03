@@ -139,7 +139,7 @@ module Phlexi
           one: {two: {three: {four: 100}}},
           checked_checkbox: "1", unchecked_checkbox: "0", invalid_checkbox: "0",
           checked_radio: "1", unchecked_radio: nil, invalid_radio: "8",
-          select: "4", invalid_select: "7", multi_select: [1,2,5,6,7, nil, ""],
+          select: "4", invalid_select: "7", multi_select: [1, 2, 5, 6, 7, nil, ""],
           collection_checkboxes: ["1", 2, "6", 7],
           collection_radio_buttons: "1",
           invalid_collection_radio_buttons: "6"
@@ -157,7 +157,7 @@ module Phlexi
           ],
           checked_checkbox: "1", unchecked_checkbox: "0", invalid_checkbox: "0",
           checked_radio: "1",
-          select: "4", invalid_select: nil, multi_select: ["1","2","5"],
+          select: "4", invalid_select: nil, multi_select: ["1", "2", "5"],
           collection_checkboxes: ["1", "2"],
           collection_radio_buttons: "1",
           invalid_collection_radio_buttons: nil

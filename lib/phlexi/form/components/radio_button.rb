@@ -30,9 +30,9 @@ module Phlexi
           super.compact
         end
 
-        def normalize_input_value(input_value)
+        def normalize_input_value(...)
           input_value = super
-          input_value == @checked_value ? input_value : nil
+          (input_value == @checked_value) ? input_value : nil
         end
       end
     end

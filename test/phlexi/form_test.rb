@@ -170,6 +170,45 @@ module Phlexi
       assert_equal expected_extracted_params, form.extract_input(params)
     end
 
+    class CustomFieldBuilder < Phlexi::Form::Base::FieldBuilder
+      def custom_tag(...)
+        label_tag(...)
+      end
+    end
+
+    class CustomForm < Phlexi::Form::Base
+      class Namespace < Namespace
+        def marco
+          "Polo"
+        end
+      end
+
+      delegate :marco, to: :@namespace
+
+      private
+
+      def default_builder_klass = CustomFieldBuilder
+    end
+
+    def test_custom_it_uses_implicit_namespace
+      form = CustomForm.new(:custom_form)
+
+      assert_equal "Polo", form.marco
+      assert form.field(:field).present?
+    end
+
+    def test_that_it_uses_explicit_field_builder
+      render CustomForm.new(:custom_form) {
+        render field(:custom_field).custom_tag
+        render field(:custom_field).input_tag
+      }
+
+      custom_component = find("label[id='custom_form_custom_field_label']")
+      assert custom_component.present?
+
+      assert_input_field_value("custom_form[custom_field]", "")
+    end
+
     private
 
     def assert_form_attributes(method)

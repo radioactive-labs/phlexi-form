@@ -19,6 +19,17 @@ module Phlexi
     class Base < COMPONENT_BASE
       include ActionView::ModelNaming
 
+      class Namespace < Structure::Namespace; end
+      class FieldBuilder < Structure::FieldBuilder; end
+
+      class << self
+        def inherited(subclass)
+          subclass.const_set(:Namespace, Class.new(self::Namespace)) unless subclass.const_defined?(:Namespace)
+          subclass.const_set(:FieldBuilder, Class.new(self::FieldBuilder)) unless subclass.const_defined?(:FieldBuilder)
+          super
+        end
+      end
+
       attr_reader :key, :object
 
       delegate :field, :nest_one, :nest_many, :extract_input, to: :@namespace
@@ -38,6 +49,8 @@ module Phlexi
         @form_method = method
         @form_class = options.delete(:class)
         @attributes = attributes
+        @namespace_klass = options.delete(:namespace_klass) || default_namespace_klass
+        @builder_klass = options.delete(:builder_klass) || default_builder_klass
         @options = options
 
         initialize_object_and_key(record)
@@ -74,7 +87,7 @@ module Phlexi
 
       protected
 
-      attr_reader :options, :attributes
+      attr_reader :options, :attributes, :namespace_klass, :builder_klass
 
       # Initializes the object and key based on the given record.
       #
@@ -177,20 +190,6 @@ module Phlexi
         object.persisted? ? "patch" : "post"
       end
 
-      # Retrieves the namespace class.
-      #
-      # @return [Class] The namespace class
-      def namespace_klass
-        @namespace_klass ||= options.delete(:namespace_klass) || Structure::Namespace
-      end
-
-      # Retrieves the builder class.
-      #
-      # @return [Class] The builder class
-      def builder_klass
-        @builder_klass ||= options.delete(:builder_klass) || Structure::FieldBuilder
-      end
-
       # Renders the hidden method field for non-standard HTTP methods.
       #
       # @return [void]
@@ -230,6 +229,16 @@ module Phlexi
       # @return [void]
       def render_authenticity_token
         authenticity_token_field
+      end
+
+      private
+
+      def default_namespace_klass
+        self.class::Namespace
+      end
+
+      def default_builder_klass
+        self.class::FieldBuilder
       end
     end
   end

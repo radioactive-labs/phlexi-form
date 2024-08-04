@@ -3,6 +3,8 @@
 require "action_view/model_naming"
 require "active_support/core_ext/module/delegation"
 require "active_support/string_inquirer"
+require "active_support/core_ext/hash/deep_merge"
+require 'active_support/core_ext/string/inflections'
 
 module Phlexi
   module Form

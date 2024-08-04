@@ -8,6 +8,11 @@ module Phlexi
           input(**attributes, value: @checked_value)
         end
 
+        def extract_input(...)
+          # when a radio is not submitted, nothing is returned
+          super.compact
+        end
+
         protected
 
         def build_input_attributes
@@ -26,11 +31,7 @@ module Phlexi
           field.dom.value == @checked_value
         end
 
-        def normalize_input(input_hash)
-          super.compact
-        end
-
-        def normalize_input_value(...)
+        def normalize_input(...)
           input_value = super
           (input_value == @checked_value) ? input_value : nil
         end

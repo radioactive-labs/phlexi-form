@@ -27,7 +27,7 @@ module Phlexi
             end
           end
 
-          def normalize_input_value(input_value)
+          def normalize_simple_input(input_value)
             ([super] & option_mapper.values)[0]
           end
         end

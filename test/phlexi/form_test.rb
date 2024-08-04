@@ -122,6 +122,8 @@ module Phlexi
         render field(:collection_checkboxes, collection: 1..5).collection_checkboxes_tag
         render field(:collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
         render field(:invalid_collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
+
+        render field(:input_param, attributes: {input_param: :custom_input_param}).input_tag
       }
       form.call
 
@@ -142,7 +144,8 @@ module Phlexi
           select: "4", invalid_select: "7", multi_select: [1, 2, 5, 6, 7, nil, ""],
           collection_checkboxes: ["1", 2, "6", 7],
           collection_radio_buttons: "1",
-          invalid_collection_radio_buttons: "6"
+          invalid_collection_radio_buttons: "6",
+          input_param: "Mangoes"
         }
       }
       expected_extracted_params = {
@@ -160,7 +163,8 @@ module Phlexi
           select: "4", invalid_select: nil, multi_select: ["1", "2", "5"],
           collection_checkboxes: ["1", "2"],
           collection_radio_buttons: "1",
-          invalid_collection_radio_buttons: nil
+          invalid_collection_radio_buttons: nil,
+          custom_input_param: "Mangoes"
         }
       }
       assert_equal expected_extracted_params, form.extract_input(params)

@@ -23,24 +23,27 @@ module Phlexi
             # regex = /^#{param}(\(\d+[if]?\))?$/
             # keys = params.select { |key, _| regex.match?(key) }.keys
             # params.slice(*keys)
-            normalize_input(params&.slice(param_key).presence || {param_key => nil})
+
+            params ||= {}
+            {input_param => normalize_input(params[field.key])}
           end
 
           protected
 
-          def param_key
-            field.key
+          def build_attributes
+            super
+            @input_param = attributes.delete(:input_param) || field.key
           end
 
-          def normalize_input(input_hash)
-            normalize_simple_input(input_hash)
+          def input_param
+            @input_param
           end
 
-          def normalize_simple_input(input_hash)
-            input_hash.transform_values { |value| normalize_input_value(value) }
+          def normalize_input(input_value)
+            normalize_simple_input(input_value)
           end
 
-          def normalize_input_value(input_value)
+          def normalize_simple_input(input_value)
             input_value.to_s.presence
           end
         end

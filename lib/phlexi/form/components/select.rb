@@ -54,8 +54,8 @@ module Phlexi
           @include_blank_option == false
         end
 
-        def normalize_input(input_hash)
-          attributes[:multiple] ? normalize_array_input(input_hash) : normalize_simple_input(input_hash)
+        def normalize_input(input_value)
+          attributes[:multiple] ? normalize_array_input(input_value) : normalize_simple_input(input_value)
         end
       end
     end

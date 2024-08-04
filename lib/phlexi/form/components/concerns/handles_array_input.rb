@@ -7,14 +7,12 @@ module Phlexi
         module HandlesArrayInput
           protected
 
-          def normalize_input(input_hash)
-            normalize_array_input(input_hash)
+          def normalize_input(input_value)
+            normalize_array_input(input_value)
           end
 
-          def normalize_array_input(input_hash)
-            input_hash.transform_values { |value|
-              Array(value).map { |nested_value| normalize_input_value(nested_value) }.compact
-            }
+          def normalize_array_input(input_value)
+            Array(input_value).map { |nested_input_value| normalize_simple_input(nested_input_value) }.compact
           end
         end
       end

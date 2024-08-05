@@ -16,7 +16,7 @@ module Phlexi
           end
 
           def field(**)
-            @field.class.new(key, attributes: @field.attributes, **, parent: @field).tap do |field|
+            @field.class.new(key, input_attributes: @field.input_attributes, **, parent: @field).tap do |field|
               yield field if block_given?
             end
           end

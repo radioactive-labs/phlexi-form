@@ -92,6 +92,17 @@ module Phlexi
           @children.values.each(&)
         end
 
+        def dom_id
+          @dom_id ||= begin
+            id =  if object.present? && object.respond_to?(:to_param)
+                    object.to_param || object
+                  elsif object.respond_to?(:id)
+                    object.id || :new
+                  end
+            [key, id].compact.join("_").underscore
+          end
+        end
+
         # Creates a root Namespace, which is essentially a form.
         def self.root(*, builder_klass:, **, &)
           new(*, parent: nil, builder_klass:, **, &)

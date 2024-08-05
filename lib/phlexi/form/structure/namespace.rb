@@ -95,7 +95,7 @@ module Phlexi
         def dom_id
           @dom_id ||= begin
             id =  if object.present? && object.respond_to?(:to_param)
-                    object.to_param || object
+                    object.to_param || :new
                   elsif object.respond_to?(:id)
                     object.id || :new
                   end

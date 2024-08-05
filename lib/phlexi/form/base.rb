@@ -222,6 +222,7 @@ module Phlexi
       # @return [Hash] The form attributes
       def form_attributes
         {
+          id: @namespace.dom_id,
           action: form_action,
           method: standardized_form_method,
           class: form_class,

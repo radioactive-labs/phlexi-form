@@ -18,10 +18,13 @@ module Phlexi
         end
 
         # Walks from the current node to the parent node, grabs the names, and seperates
-        # them with a `_` for a DOM ID. One limitation of this approach is if multiple forms
-        # exist on the same page, the ID may be duplicate.
+        # them with a `_` for a DOM ID.
         def id
-          @id ||= lineage.map(&:key).join("_")
+          @id ||= begin
+            root, *rest = lineage
+            root_key = root.respond_to?(:dom_id) ? root.dom_id : root.key
+            rest.map(&:key).unshift(root_key).join("_")
+          end
         end
 
         # The `name` attribute of a node, which is influenced by Rails.

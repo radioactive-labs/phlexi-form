@@ -29,6 +29,10 @@ module Phlexi
           end
         end
 
+        def submit_button(key=nil, **attributes, &)
+          field(key || SecureRandom.hex).submit_button_tag(**attributes, &)
+        end
+
         # Creates a `Namespace` child instance with the parent set to the current instance, adds to
         # the `@children` Hash to ensure duplicate child namespaces aren't created, then calls the
         # method on the `@object` to get the child object to pass into that namespace.

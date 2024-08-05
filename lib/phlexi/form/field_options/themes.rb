@@ -172,9 +172,10 @@ module Phlexi
             # label: nil,
             # hint: nil,
             # error: nil,
-            full_error: :error
+            full_error: :error,
             # wrapper: nil,
             # inner_wrapper: nil,
+            submit_button: :button,
 
             # # label themes
             # label: "md:w-1/6 mt-2 block mb-2 text-sm font-medium",

@@ -21,16 +21,23 @@ module Phlexi
         # them with a `_` for a DOM ID. One limitation of this approach is if multiple forms
         # exist on the same page, the ID may be duplicate.
         def id
-          lineage.map(&:key).join("_")
+          @id ||= lineage.map(&:key).join("_")
         end
 
-        # The `name` attribute of a node, which is influenced by Rails (not sure where Rails got
-        # it from). All node names, except the parent node, are wrapped in a `[]` and collections
+        # The `name` attribute of a node, which is influenced by Rails.
+        # All node names, except the parent node, are wrapped in a `[]` and collections
         # are left empty. For example, `user[addresses][][street]` would be created for a form with
         # data shaped like `{user: {addresses: [{street: "Sesame Street"}]}}`.
         def name
-          root, *names = keys
-          names.map { |name| "[#{name}]" }.unshift(root).join
+          @name ||= begin
+            root, *names = keys
+            names.map { |name| "[#{name}]" }.unshift(root).join
+          end
+        end
+
+        # One-liner way of walking from the current node all the way up to the parent.
+        def lineage
+          @lineage ||= Enumerator.produce(@field, &:parent).take_while(&:itself).reverse
         end
 
         # Emit the id, name, and value in an HTML tag-ish that doesnt have an element.
@@ -41,15 +48,12 @@ module Phlexi
         private
 
         def keys
-          lineage.map do |node|
-            # If the parent of a field is a field, the name should be nil.
-            node.key unless node.parent.is_a? FieldBuilder
+          @keys ||= begin
+            lineage.map do |node|
+              # If the parent of a field is a field, the name should be nil.
+              node.key unless node.parent.is_a? FieldBuilder
+            end
           end
-        end
-
-        # One-liner way of walking from the current node all the way up to the parent.
-        def lineage
-          Enumerator.produce(@field, &:parent).take_while(&:itself).reverse
         end
       end
     end

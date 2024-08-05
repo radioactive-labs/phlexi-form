@@ -11,9 +11,9 @@ module Phlexi
     # A form component for building flexible and customizable forms.
     #
     # @example Basic usage
-    #   Form.new(user, action: '/users', method: 'post') do |f|
-    #     f.field :name
-    #     f.field :email
+    #   Phlexi::Form.new(user, action: '/users', method: 'post') do |f|
+    #     render field(:name).placeholder("Name").input_tag
+    #     render field(:email).placeholder("Email").input_tag
     #   end
     #
     # @attr_reader [Symbol] key The form's key, derived from the record or explicitly set
@@ -34,7 +34,7 @@ module Phlexi
 
       attr_reader :key, :object
 
-      delegate :field, :nest_one, :nest_many, :extract_input, to: :@namespace
+      delegate :field, :submit_button, :nest_one, :nest_many, :extract_input, to: :@namespace
 
       # Initializes a new Form instance.
       #
@@ -188,8 +188,11 @@ module Phlexi
       #
       # @return [String, nil] The appropriate form method
       def object_form_method
-        return unless object
-        object.persisted? ? "patch" : "post"
+        if object.respond_to?(:persisted?)
+          object.persisted? ? "patch" : "post"
+        elsif object.present?
+          "post"
+        end
       end
 
       # Renders the hidden method field for non-standard HTTP methods.

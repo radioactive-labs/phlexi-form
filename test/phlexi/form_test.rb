@@ -190,14 +190,14 @@ module Phlexi
       def default_builder_klass = CustomFieldBuilder
     end
 
-    def test_custom_it_uses_implicit_namespace
+    def test_that_it_uses_implicit_custom_namespace
       form = CustomForm.new(:custom_form)
 
       assert_equal "Polo", form.marco
       assert form.field(:field).present?
     end
 
-    def test_that_it_uses_explicit_field_builder
+    def test_that_it_uses_explicit_custom_field_builder
       render CustomForm.new(:custom_form) {
         render field(:custom_field).custom_tag
         render field(:custom_field).input_tag
@@ -207,6 +207,16 @@ module Phlexi
       assert custom_component.present?
 
       assert_input_field_value("custom_form[custom_field]", "")
+    end
+
+    def test_submit_button
+      render Phlexi::Form(:form) {
+        render submit_button
+      }
+
+      submit_btn = find("button[id='form_submit_button']")
+      assert submit_btn.present?
+      assert_equal "Submit Form", submit_btn.text
     end
 
     private

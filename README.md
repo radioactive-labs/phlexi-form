@@ -1,17 +1,18 @@
 # Phlexi::Form 
 
-Phlexi::Form is a flexible and powerful form builder for Ruby on Rails applications. It provides a more customizable and extensible way to create forms compared to traditional Rails form helpers.
+Phlexi::Form is a flexible and powerful form builder for Ruby applications. It provides a more customizable and extensible way to create forms compared to traditional form helpers.
 
 [![Ruby](https://github.com/radioactive-labs/phlexi-form/actions/workflows/main.yml/badge.svg)](https://github.com/radioactive-labs/phlexi-form/actions/workflows/main.yml)
 
 ## Features
 
-- Flexible form structure with support for nested attributes
 - Customizable form components (input, select, checkbox, radio button, etc.)
 - Automatic field type and attribute inference based on model attributes
 - Built-in support for validations and error handling
-- Easy integration with Phlex views
-- Extract input from parameters that match your form definition
+- Flexible form structure with support for nested attributes
+- Works with Phlex or erb views
+- Extract input from parameters that match your form definition. No need to strong paramters.
+- Rails compatible form inputs
 
 
 ## Installation
@@ -36,41 +37,98 @@ $ gem install phlexi-form
 
 ## Usage
 
-Here's a basic example of how to use Phlexi::Form:
+There are 2 ways to use Phlexi::Form:
+
+### Direct Usage
+
+```ruby
+Phlexi::Form(User.new) do
+  field(:name) do |name|
+    render name.label_tag
+    render name.input_tag
+  end
+
+  field(:email) do |email|
+    render email.label_tag
+    render email.input_tag
+  end
+
+  nest_one(:address) do |address|
+    address.field(:street) do |street|
+      render street.label_tag
+      render street.input_tag
+    end
+
+    address.field(:city) do |city|
+      render city.label_tag
+      render city.input_tag
+    end
+  end
+
+  render submit_button
+end
+```
+
+> **Important**
+>
+> If you are rendering your form inline e.g. 
+> ```ruby
+> render Phlexi::Form(User.new) {
+>   render field(:name).label_tag
+>   render field(:name).input_tag
+> }
+> ```
+>
+> Make sure you use `{...}` in defining your block instead of `do...end`
+> This might be fixed in a future version.
+
+### Inherit form
 
 ```ruby
 class UserForm < Phlexi::Form::Base
-  def template
-    form do
-      field(:name) do |name|
-        render name.label_tag
-        render name.input_tag
-      end
-
-      field(:email) do |email|
-        render email.label_tag
-        render email.input_tag
-      end
-
-      nest_one(:address) do |address|
-        address.field(:street) do |street|
-          render street.label_tag
-          render street.input_tag
-        end
-
-        address.field(:city) do |city|
-          render city.label_tag
-          render city.input_tag
-        end
-      end
-
-      button(type: "submit") { "Submit" }
+  def form_template
+    field(:name) do |name|
+      render name.label_tag
+      render name.input_tag
     end
+
+    field(:email) do |email|
+      render email.label_tag
+      render email.input_tag
+    end
+
+    nest_one(:address) do |address|
+      address.field(:street) do |street|
+        render street.label_tag
+        render street.input_tag
+      end
+
+      address.field(:city) do |city|
+        render city.label_tag
+        render city.input_tag
+      end
+    end
+
+    render submit_button
   end
 end
 
+
 # In your view or controller
-render UserForm.new(User.new)
+form = UserForm.new(User.new)
+
+# Render the form
+render form
+
+# Extract params
+form.extract({
+  name: "Brad Pitt",
+  email: "brad@pitt.com",
+  address: {
+    street: "Plumbago",
+    city: "Accra",
+  }
+})
 ```
 
 ## Advanced Usage
@@ -101,13 +159,9 @@ Phlexi::Form supports theming through a flexible theming system:
 
 ```ruby
 class ThemedForm < Phlexi::Form::Base
-  def initialize(record, **options)
-    super(record, theme: custom_theme, **options)
-  end
-
   private
 
-  def custom_theme
+  def default_theme
     {
       input: "border rounded px-2 py-1",
       label: "font-bold text-gray-700",

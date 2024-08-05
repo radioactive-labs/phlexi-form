@@ -168,6 +168,14 @@ module Phlexi
           FieldCollection.new(field: self, range: range, &)
         end
 
+        # Creates a submit button
+        #
+        # @param attributes [Hash] Additional attributes for the submit.
+        # @return [Components::SubmitButton] The submit button component.
+        def submit_button_tag(**attributes, &)
+          create_component(Components::SubmitButton, :submit_button, **attributes, &)
+        end
+
         def extract_input(params)
           raise "field##{dom.name} did not define an input component" unless @field_input_component
 

@@ -14,8 +14,8 @@ module Phlexi
 
               field = builder.field(
                 label: option_mapper[builder.key],
-                # We set the attributes here so they are applied to all components even if the user decides to use a block
-                attributes: {
+                # We set the attributes here so they are applied to all input components even if the user decides to use a block
+                input_attributes: {
                   checked_value: builder.key
                 }
               )

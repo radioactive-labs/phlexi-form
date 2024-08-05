@@ -32,7 +32,7 @@ module Phlexi
         include FieldOptions::Multiple
         include FieldOptions::Limit
 
-        attr_reader :dom, :options, :object, :attributes, :value
+        attr_reader :dom, :options, :object, :input_attributes, :value
 
         # Initializes a new FieldBuilder instance.
         #
@@ -40,14 +40,14 @@ module Phlexi
         # @param parent [Structure::Namespace] The parent object.
         # @param object [Object, nil] The associated object.
         # @param value [Object] The initial value for the field.
-        # @param attributes [Hash] Default attributes to apply to all fields.
+        # @param input_attributes [Hash] Default attributes to apply to input fields.
         # @param options [Hash] Additional options for the field.
-        def initialize(key, parent:, object: nil, value: NIL_VALUE, attributes: {}, **options)
+        def initialize(key, parent:, object: nil, value: NIL_VALUE, input_attributes: {}, **options)
           super(key, parent: parent)
 
           @object = object
           @value = determine_initial_value(object, value)
-          @attributes = attributes
+          @input_attributes = input_attributes
           @options = options
           @dom = Structure::DOM.new(field: self)
         end
@@ -153,7 +153,6 @@ module Phlexi
         # @yield [block] The block to be executed within the wrapper.
         # @return [Components::Wrapper] The wrapper component.
         def wrapped(inner: {}, **attributes, &)
-          attributes = self.attributes.deep_merge(attributes)
           wrapper_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :wrapper)
           inner[:class] = inner.delete(:class) || themed(inner.delete(:theme) || :inner_wrapper)
           Components::Wrapper.new(self, class: wrapper_class, inner: inner, **attributes, &)
@@ -185,16 +184,14 @@ module Phlexi
         protected
 
         def create_component(component_class, theme_key, **attributes)
-          attributes = self.attributes.deep_merge(attributes)
-          component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
           if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
-            if @field_input_component
-              raise "input component already defined: #{@field_input_component.inspect}"
-            else
-              @field_input_component = component
-            end
+            raise "input component already defined: #{@field_input_component.inspect}" if @field_input_component
+
+            attributes = self.input_attributes.deep_merge(attributes)
+            @field_input_component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+          else
+            component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
           end
-          component
         end
 
         def component_class_for(theme_key, attributes)

@@ -57,8 +57,7 @@ module Phlexi
           return nil if !property.present? || visited.include?(property)
           visited.add(property)
 
-          result = options[property] || theme[property]
-
+          result = theme[property]
           if result.is_a?(Symbol)
             resolve_theme(result, visited)
           else

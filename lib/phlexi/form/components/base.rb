@@ -11,20 +11,26 @@ module Phlexi
           @attributes = attributes
 
           build_attributes
+          append_attribute_classes
         end
 
         protected
 
         def build_attributes
           attributes[:id] ||= "#{field.dom.id}_#{component_name}"
+        end
+
+        def append_attribute_classes
+          return if attributes[:class] == false
+
           attributes[:class] = tokens(
             component_name,
             attributes[:class],
-            -> { field.required? } => "required",
-            -> { !field.required? } => "optional",
+            -> { attributes[:required] } => "required",
+            -> { !attributes[:required] } => "optional",
             -> { field.has_errors? } => "invalid",
-            -> { field.readonly? } => "readonly",
-            -> { field.disabled? } => "disabled"
+            -> { attributes[:readonly] } => "readonly",
+            -> { attributes[:disabled] } => "disabled"
           )
         end
 

@@ -19,11 +19,11 @@ module Phlexi
           end
 
           def selected?(option)
-            if field.multiple?
+            if attributes[:multiple]
               @options_list ||= Array(field.value)
               @options_list.any? { |item| item.to_s == option.to_s }
             else
-              field.dom.value == option.to_s
+              field.value.to_s == option.to_s
             end
           end
 

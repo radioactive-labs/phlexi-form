@@ -51,11 +51,9 @@ module Phlexi
         private
 
         def keys
-          @keys ||= begin
-            lineage.map do |node|
-              # If the parent of a field is a field, the name should be nil.
-              node.key unless node.parent.is_a? FieldBuilder
-            end
+          @keys ||= lineage.map do |node|
+            # If the parent of a field is a field, the name should be nil.
+            node.key unless node.parent.is_a? FieldBuilder
           end
         end
       end

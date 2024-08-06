@@ -4,7 +4,7 @@ require "action_view/model_naming"
 require "active_support/core_ext/module/delegation"
 require "active_support/string_inquirer"
 require "active_support/core_ext/hash/deep_merge"
-require 'active_support/core_ext/string/inflections'
+require "active_support/core_ext/string/inflections"
 
 module Phlexi
   module Form
@@ -22,6 +22,7 @@ module Phlexi
       include ActionView::ModelNaming
 
       class Namespace < Structure::Namespace; end
+
       class FieldBuilder < Structure::FieldBuilder; end
 
       class << self
@@ -34,7 +35,7 @@ module Phlexi
 
       attr_reader :key, :object
 
-      delegate :field, :submit_button, :nest_one, :nest_many, :extract_input, to: :@namespace
+      delegate :field, :submit_button, :nest_one, :nest_many, to: :@namespace
 
       # Initializes a new Form instance.
       #
@@ -79,12 +80,17 @@ module Phlexi
       #
       # @yield The form's content
       # @return [void]
-      def form_tag(&block)
+      def form_tag(&)
         form(**form_attributes) do
           render_hidden_method_field
           render_authenticity_token if authenticity_token?
           yield
         end
+      end
+
+      def extract_input(params)
+        call unless @_rendered
+        @namespace.extract_input(params)
       end
 
       protected

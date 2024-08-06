@@ -127,7 +127,6 @@ module Phlexi
 
         render field(:input_param, input_attributes: {input_param: :custom_input_param}).input_tag
       }
-      form.call
 
       params = {
         user: {
@@ -231,7 +230,6 @@ module Phlexi
 
     def assert_input_field_value(name, value)
       input = find("input[name='#{name}']")
-      assert input.present?
       assert_equal value, input["value"]
     end
   end

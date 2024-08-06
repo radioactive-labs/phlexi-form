@@ -187,7 +187,7 @@ module Phlexi
           if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
             raise "input component already defined: #{@field_input_component.inspect}" if @field_input_component
 
-            attributes = self.input_attributes.deep_merge(attributes)
+            attributes = input_attributes.deep_merge(attributes)
             @field_input_component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
           else
             component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)

@@ -8,7 +8,7 @@ module Phlexi
           options[:autofocus] == true
         end
 
-        def focus(autofocus = true)
+        def focused!(autofocus = true)
           options[:autofocus] = autofocus
           self
         end

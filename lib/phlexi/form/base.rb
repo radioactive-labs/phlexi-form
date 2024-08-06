@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "action_view/model_naming"
 require "active_support/core_ext/module/delegation"
 require "active_support/string_inquirer"
 require "active_support/core_ext/hash/deep_merge"
@@ -19,8 +18,6 @@ module Phlexi
     # @attr_reader [Symbol] key The form's key, derived from the record or explicitly set
     # @attr_reader [ActiveModel::Model, nil] object The form's associated object
     class Base < COMPONENT_BASE
-      include ActionView::ModelNaming
-
       class Namespace < Structure::Namespace; end
 
       class FieldBuilder < Structure::FieldBuilder; end
@@ -111,7 +108,7 @@ module Phlexi
           @object = nil
           @key = record
         else
-          @object = convert_to_model(record)
+          @object = record
           if @key.nil?
             unless object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key.present?
               raise ArgumentError, "record must respond to #model_name.param_key with a non nil value or set `key` option e.g. Phlexi::Form(record, key: :record)"
@@ -162,10 +159,7 @@ module Phlexi
       # Retrieves the form's CSS classes.
       #
       # @return [String] The form's CSS classes
-      def form_class
-        # @form_class || "flex flex-col space-y-6 px-4 py-2"
-        @form_class
-      end
+      attr_reader :form_class
 
       # Checks if the authenticity token should be included.
       #

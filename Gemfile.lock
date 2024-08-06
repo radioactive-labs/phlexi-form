@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     phlexi-form (0.2.0)
-      actionview
       activesupport
       phlex (~> 1.10)
       zeitwerk

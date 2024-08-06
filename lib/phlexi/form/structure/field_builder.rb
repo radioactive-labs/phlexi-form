@@ -14,6 +14,7 @@ module Phlexi
       # @attr_accessor [Object] value The value of the field.
       class FieldBuilder < Node
         include Phlex::Helpers
+        include FieldOptions::Associations
         include FieldOptions::Themes
         include FieldOptions::Validators
         include FieldOptions::Labels
@@ -46,7 +47,7 @@ module Phlexi
           super(key, parent: parent)
 
           @object = object
-          @value = determine_initial_value(object, value)
+          @value = determine_initial_value(value)
           @input_attributes = input_attributes
           @options = options
           @dom = Structure::DOM.new(field: self)
@@ -198,18 +199,30 @@ module Phlexi
           attributes.delete(:class) || themed(attributes.key?(:theme) ? attributes.delete(:theme) : theme_key)
         end
 
-        def reflection
-          nil
-        end
-
         def has_value?
           value.present?
         end
 
-        def determine_initial_value(object, value)
+        def determine_initial_value(value)
           return value unless value == NIL_VALUE
 
+          determine_from_association || determine_value_from_object
+        end
+
+        def determine_value_from_object
           object.respond_to?(key) ? object.public_send(key) : nil
+        end
+
+        def determine_from_association
+          return nil unless reflection.present?
+
+          value = object.public_send(key)
+          case reflection.macro
+          when :has_many
+            value.map(&:to_param)
+          else
+            value.to_param
+          end
         end
       end
     end

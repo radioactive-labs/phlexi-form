@@ -9,4 +9,5 @@
 
 # rspec failure tracking
 .rspec_status
-test/internal/db/*.sqlite
+test/internal/db/*.sqlite*
+ai_tools

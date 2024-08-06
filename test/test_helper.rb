@@ -1,8 +1,13 @@
-# Uncomment and update these requires as needed
+# Usage
+def gem_present?(gem_name)
+  Gem::Specification.find_all_by_name(gem_name).any?
+end
 
-# require "combustion"
-# Combustion.path = "test/internal"
-# Combustion.initialize! :all
+if gem_present?("rails")
+  require "combustion"
+  Combustion.path = "test/internal"
+  Combustion.initialize! :active_record
+end
 
 require "minitest/autorun"
 

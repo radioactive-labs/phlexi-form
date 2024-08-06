@@ -67,7 +67,7 @@ module Phlexi
             attributes[:max] = attributes.fetch(:max, field.max)
             attributes[:step] = attributes.fetch(:step, field.step)
           when :hidden
-            attributes.delete(:class)
+            attributes[:class] = false
             attributes[:hidden] = true
             attributes[:autocomplete] = "off"
           else

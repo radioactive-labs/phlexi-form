@@ -16,7 +16,8 @@ module Phlexi
                 label: option_mapper[builder.key],
                 # We set the attributes here so they are applied to all input components even if the user decides to use a block
                 input_attributes: {
-                  checked_value: builder.key
+                  checked_value: builder.key,
+                  checked: selected?(builder.key)
                 }
               )
               if block_given?

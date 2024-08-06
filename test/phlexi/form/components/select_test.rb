@@ -134,6 +134,29 @@ module Phlexi
           assert_equal({user: {name: []}}, form.extract_input({user: {name: nil}}))
           assert_equal({user: {name: []}}, form.extract_input({user: {}}))
         end
+
+        def test_associations
+          return unless gem_present?("rails")
+
+          user1 = User.create! name: "John Doe"
+          Post.create! user: user1, body: "User 1 Post 1"
+          Post.create! user: user1, body: "User 1 Post 2"
+
+          user2 = User.create! name: "Jane Doe"
+          post = Post.create! user: user2, body: "User 2 Post 1"
+
+          user_form = Phlexi::Form(user1) {
+            render field(:posts).select_tag(label_method: :body)
+          }
+          expected_user_form_html = '<form id="user_1" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><select class="select optional" id="user_1_posts" name="user[posts]" multiple><option selected value="1">User 1 Post 1</option><option selected value="2">User 1 Post 2</option><option value="3">User 2 Post 1</option></select></form>'
+          assert_equal expected_user_form_html, user_form.call
+
+          post_form = Phlexi::Form(post) {
+            render field(:user).select_tag
+          }
+          expected_post_form_html = '<form id="post_3" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><select class="select optional" id="post_3_user" name="post[user]"><option></option><option value="1">John Doe</option><option selected value="2">Jane Doe</option></select></form>'
+          assert_equal expected_post_form_html, post_form.call
+        end
       end
     end
   end

@@ -217,7 +217,11 @@ module Phlexi
 
       submit_btn = find("button[id='form_submit_button']")
       assert submit_btn.present?
-      assert_equal "Submit Form", submit_btn.text
+      if gem_present?("rails")
+        assert_equal "Save Form", submit_btn.text
+      else
+        assert_equal "Submit Form", submit_btn.text
+      end
     end
 
     private

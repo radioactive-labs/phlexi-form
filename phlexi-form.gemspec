@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "phlex", "~> 1.10"
   spec.add_dependency "activesupport"
-  spec.add_dependency "actionview"
+  # spec.add_dependency "actionview"
   spec.add_dependency "zeitwerk"
 
   spec.add_development_dependency "rake"

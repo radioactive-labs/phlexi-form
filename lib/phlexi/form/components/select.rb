@@ -51,7 +51,7 @@ module Phlexi
         end
 
         def skip_blank_option?
-          @include_blank == false
+          @include_blank == false || attributes[:multiple]
         end
 
         def normalize_input(input_value)

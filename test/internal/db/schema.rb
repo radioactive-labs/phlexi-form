@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 ActiveRecord::Schema.define do
-  # Set up any tables you need to exist for your test suite that don't belong
-  # in migrations.
+  create_table :users, force: true do |t|
+    t.string :name
+    t.string :email
+    t.timestamps null: false
+  end
+
+  create_table :posts, force: true do |t|
+    t.belongs_to :user
+    t.string :body
+    t.timestamps null: false
+  end
 end

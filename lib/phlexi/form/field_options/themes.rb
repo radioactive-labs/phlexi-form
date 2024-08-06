@@ -174,7 +174,7 @@ module Phlexi
             full_error: :error,
             # wrapper: nil,
             # inner_wrapper: nil,
-            submit_button: :button,
+            submit_button: :button
 
             # # label themes
             # label: "md:w-1/6 mt-2 block mb-2 text-sm font-medium",

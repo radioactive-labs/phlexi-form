@@ -29,7 +29,7 @@ module Phlexi
           end
         end
 
-        def submit_button(key=nil, **attributes, &)
+        def submit_button(key = nil, **attributes, &)
           field(key || SecureRandom.hex).submit_button_tag(**attributes, &)
         end
 
@@ -94,11 +94,11 @@ module Phlexi
 
         def dom_id
           @dom_id ||= begin
-            id =  if object.present? && object.respond_to?(:to_param)
-                    object.to_param || :new
-                  elsif object.respond_to?(:id)
-                    object.id || :new
-                  end
+            id = if object.present? && object.respond_to?(:to_param)
+              object.to_param || :new
+            elsif object.respond_to?(:id)
+              object.id || :new
+            end
             [key, id].compact.join("_").underscore
           end
         end

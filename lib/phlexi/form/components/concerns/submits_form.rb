@@ -15,7 +15,7 @@ module Phlexi
 
           def submit_type_label
             @submit_type_label ||= begin
-              key    = submit_type_value
+              key = submit_type_value
 
               model_object = field.dom.lineage.first.key.to_s
               model_name_human = if field.object.respond_to?(:model_name)

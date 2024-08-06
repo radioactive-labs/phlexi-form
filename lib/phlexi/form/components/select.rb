@@ -37,7 +37,7 @@ module Phlexi
         end
 
         def build_select_attributes
-          @include_blank_option = attributes.delete(:include_blank_option)
+          @include_blank = attributes.delete(:include_blank)
 
           attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
           attributes[:required] = attributes.fetch(:required, field.required?)
@@ -51,7 +51,7 @@ module Phlexi
         end
 
         def skip_blank_option?
-          @include_blank_option == false
+          @include_blank == false
         end
 
         def normalize_input(input_value)

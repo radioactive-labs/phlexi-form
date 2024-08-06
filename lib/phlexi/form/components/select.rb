@@ -9,8 +9,9 @@ module Phlexi
         include Concerns::HasOptions
 
         def view_template(&block)
+          input(type: :hidden, name: attributes[:name], value: "", autocomplete: "off", hidden: true) if include_hidden?
           select(**attributes) do
-            blank_option { blank_option_text } unless skip_blank_option?
+            blank_option { blank_option_text } if include_blank?
             options
           end
         end
@@ -38,6 +39,7 @@ module Phlexi
 
         def build_select_attributes
           @include_blank = attributes.delete(:include_blank)
+          @include_hidden = attributes.delete(:include_hidden)
 
           attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
           attributes[:required] = attributes.fetch(:required, field.required?)
@@ -50,8 +52,16 @@ module Phlexi
           field.placeholder
         end
 
-        def skip_blank_option?
-          @include_blank == false || attributes[:multiple]
+        def include_blank?
+          return true if @include_blank == true
+
+          @include_blank != false && !attributes[:multiple]
+        end
+
+        def include_hidden?
+          return false if @include_hidden == false
+
+          attributes[:multiple]
         end
 
         def normalize_input(input_value)

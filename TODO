@@ -1,0 +1,3 @@
+- Add tests for primary_key
+- Ensure composite primary keys are supported
+- add tests for formmethod override in submit_button

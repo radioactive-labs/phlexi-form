@@ -8,7 +8,7 @@ module Phlexi
         include Concerns::HandlesArrayInput
         include Concerns::HasOptions
 
-        def view_template(&block)
+        def view_template
           input(type: :hidden, name: attributes[:name], value: "", autocomplete: "off", hidden: true) if include_hidden?
           select(**attributes) do
             blank_option { blank_option_text } if include_blank?

@@ -18,7 +18,8 @@ module Phlexi
 
         def build_attributes
           super
-          attributes[:for] ||= field.dom.id
+
+          attributes.fetch(:for) { attributes[:for] = field.dom.id }
         end
       end
     end

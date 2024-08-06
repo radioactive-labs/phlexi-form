@@ -17,7 +17,7 @@ module Phlexi
         protected
 
         def build_attributes
-          attributes[:id] ||= "#{field.dom.id}_#{component_name}"
+          attributes.fetch(:id) { attributes[:id] = "#{field.dom.id}_#{component_name}" }
         end
 
         def append_attribute_classes

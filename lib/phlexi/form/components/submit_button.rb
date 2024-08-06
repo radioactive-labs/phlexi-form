@@ -15,7 +15,7 @@ module Phlexi
 
         def build_attributes
           root_key = field.dom.lineage.first.respond_to?(:dom_id) ? field.dom.lineage.first.dom_id : field.dom.lineage.first.key
-          attributes[:id] ||= "#{root_key}_submit_button"
+          attributes.fetch(:id) { attributes[:id] = "#{root_key}_submit_button" }
           attributes[:class] = tokens(
             component_name,
             submit_type_value,
@@ -31,9 +31,9 @@ module Phlexi
             attributes.merge! formmethod: :post, name: "_method", value: formmethod
           end
 
-          attributes[:name] ||= "commit"
-          attributes[:value] ||= submit_type_label
-          attributes[:type] ||= :submit
+          attributes.fetch(:name) { attributes[:name] = "commit" }
+          attributes.fetch(:value) { attributes[:value] = submit_type_label }
+          attributes.fetch(:type) { attributes[:type] = :submit }
         end
       end
     end

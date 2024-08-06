@@ -25,47 +25,46 @@ module Phlexi
         end
 
         def build_input_attributes
-          attributes[:type] = attributes.fetch(:type, field.inferred_input_type)
-          attributes[:disabled] = attributes.fetch(:disabled, field.disabled?)
+          attributes.fetch(:type) { attributes[:type] = field.inferred_input_type }
+          attributes.fetch(:disabled) { attributes[:disabled] = field.disabled? }
 
           case attributes[:type]
           when :text, :password, :email, :tel, :url, :search
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:placeholder] = attributes.fetch(:placeholder, field.placeholder)
-            attributes[:minlength] = attributes.fetch(:minlength, field.minlength)
-            attributes[:maxlength] = attributes.fetch(:maxlength, field.maxlength)
-            attributes[:readonly] = attributes.fetch(:readonly, field.readonly?)
-            attributes[:required] = attributes.fetch(:required, field.required?)
-            attributes[:pattern] = attributes.fetch(:pattern, field.pattern)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:placeholder) { attributes[:placeholder] = field.placeholder }
+            attributes.fetch(:minlength) { attributes[:minlength] = field.minlength }
+            attributes.fetch(:maxlength) { attributes[:maxlength] = field.maxlength }
+            attributes.fetch(:readonly) { attributes[:readonly] = field.readonly? }
+            attributes.fetch(:required) { attributes[:required] = field.required? }
+            attributes.fetch(:pattern) { attributes[:pattern] = field.pattern }
           when :number
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:placeholder] = attributes.fetch(:placeholder, field.placeholder)
-            attributes[:readonly] = attributes.fetch(:readonly, field.readonly?)
-            attributes[:required] = attributes.fetch(:required, field.required?)
-            attributes[:min] = attributes.fetch(:min, field.min)
-            attributes[:max] = attributes.fetch(:max, field.max)
-            attributes[:step] = attributes.fetch(:step, field.step)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:placeholder) { attributes[:placeholder] = field.placeholder }
+            attributes.fetch(:readonly) { attributes[:readonly] = field.readonly? }
+            attributes.fetch(:required) { attributes[:required] = field.required? }
+            attributes.fetch(:min) { attributes[:min] = field.min }
+            attributes.fetch(:max) { attributes[:max] = field.max }
+            attributes.fetch(:step) { attributes[:step] = field.step }
           when :checkbox, :radio
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:required] = attributes.fetch(:required, field.required?)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:required) { attributes[:required] = field.required? }
           when :file
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:required] = attributes.fetch(:required, field.required?)
-            attributes[:multiple] = attributes.fetch(:multiple, field.multiple)
-            attributes[:accept] = attributes.fetch(:accept, field.accept)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:required) { attributes[:required] = field.required? }
+            attributes.fetch(:multiple) { attributes[:multiple] = field.multiple? }
           when :date, :time, :datetime_local
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:readonly] = attributes.fetch(:readonly, field.readonly?)
-            attributes[:required] = attributes.fetch(:required, field.required?)
-            attributes[:min] = attributes.fetch(:min, field.min)
-            attributes[:max] = attributes.fetch(:max, field.max)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:readonly) { attributes[:readonly] = field.readonly? }
+            attributes.fetch(:required) { attributes[:required] = field.required? }
+            attributes.fetch(:min) { attributes[:min] = field.min }
+            attributes.fetch(:max) { attributes[:max] = field.max }
           when :color
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
           when :range
-            attributes[:autofocus] = attributes.fetch(:autofocus, field.focused?)
-            attributes[:min] = attributes.fetch(:min, field.min)
-            attributes[:max] = attributes.fetch(:max, field.max)
-            attributes[:step] = attributes.fetch(:step, field.step)
+            attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
+            attributes.fetch(:min) { attributes[:min] = field.min }
+            attributes.fetch(:max) { attributes[:max] = field.max }
+            attributes.fetch(:step) { attributes[:step] = field.step }
           when :hidden
             attributes[:class] = false
             attributes[:hidden] = true

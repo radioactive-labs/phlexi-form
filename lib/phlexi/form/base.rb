@@ -130,7 +130,7 @@ module Phlexi
       #
       # @return [void]
       def initialize_attributes
-        attributes[:accept_charset] ||= "UTF-8"
+        attributes.fetch(:accept_charset) { attributes[:accept_charset] = "UTF-8" }
       end
 
       # Determines the form's action URL.

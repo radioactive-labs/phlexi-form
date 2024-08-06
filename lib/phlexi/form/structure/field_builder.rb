@@ -218,10 +218,12 @@ module Phlexi
 
           value = object.public_send(key)
           case reflection.macro
-          when :has_many
-            value.map(&:to_param)
+          when :has_many, :has_and_belongs_to_many
+            value&.map { |v| v.public_send(reflection.klass.primary_key) }
+          when :belongs_to, :has_one
+            value&.public_send(reflection.klass.primary_key)
           else
-            value.to_param
+            raise ArgumentError, "Unsupported association type: #{reflection.macro}"
           end
         end
       end

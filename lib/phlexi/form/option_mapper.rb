@@ -142,7 +142,7 @@ module Phlexi
 
       # @return [Array<Symbol>] An array of method names to try for collection values.
       def collection_value_methods
-        @collection_value_methods ||= %i[to_param id to_s].freeze
+        @collection_value_methods ||= %i[id to_s].freeze
       end
 
       # @return [Array<Symbol>] An array of method names to try for collection labels.

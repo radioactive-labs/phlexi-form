@@ -94,8 +94,10 @@ module Phlexi
 
         def dom_id
           @dom_id ||= begin
-            id = if object.present? && object.respond_to?(:to_param)
-              object.to_param || :new
+            id = if object.nil?
+              nil
+            elsif object.class.respond_to?(:primary_key)
+              object.public_send(object.class.primary_key) || :new
             elsif object.respond_to?(:id)
               object.id || :new
             end

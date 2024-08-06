@@ -15,7 +15,6 @@ module Phlexi
     def setup
       @user = OpenStruct.new(
         id: 1,
-        to_param: 1,
         model_name: OpenStruct.new(param_key: "user"),
         name: "William Bills",
         nicknames: ["Bill", "Billy", "Will"],

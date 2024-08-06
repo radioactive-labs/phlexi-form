@@ -26,6 +26,11 @@ module Phlexi
         end
 
         def build_button_attributes
+          formmethod = attributes[:formmethod]
+          if formmethod.present? && !/post|get/i.match?(formmethod) && !attributes.key?(:name) && !attributes.key?(:value)
+            attributes.merge! formmethod: :post, name: "_method", value: formmethod
+          end
+
           attributes[:name] ||= "commit"
           attributes[:value] ||= submit_type_label
           attributes[:type] ||= :submit

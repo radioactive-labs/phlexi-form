@@ -167,6 +167,12 @@ module Phlexi
             invalid_select: :invalid_input,
             neutral_select: :neutral_input,
 
+            # file
+            file: :input,
+            valid_file: :valid_input,
+            invalid_file: :invalid_input,
+            neutral_file: :neutral_input,
+
             # misc
             # label: nil,
             # hint: nil,

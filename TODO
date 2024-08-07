@@ -1,3 +1,4 @@
 - Add tests for primary_key
 - Ensure composite primary keys are supported
 - add tests for formmethod override in submit_button
+- how can we automatically infer the file types accepted by the file_input component

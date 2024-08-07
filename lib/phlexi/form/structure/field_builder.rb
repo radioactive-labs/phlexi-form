@@ -69,6 +69,10 @@ module Phlexi
           create_component(Components::Input, :input, **attributes)
         end
 
+        def file_input_tag(**attributes)
+          create_component(Components::FileInput, :file, **attributes)
+        end
+
         # Creates a checkbox tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the checkbox.

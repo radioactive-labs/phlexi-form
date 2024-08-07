@@ -121,7 +121,7 @@ form = UserForm.new(User.new)
 render form
 
 # Extract params
-form.extract({
+form.extract_input({
   name: "Brad Pitt",
   email: "brad@pitt.com",
   address: {

@@ -3,7 +3,7 @@ PATH
   specs:
     phlexi-form (0.2.0)
       activesupport
-      phlex (~> 1.10)
+      phlex (~> 1.11)
       zeitwerk
 
 GEM

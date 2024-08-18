@@ -57,28 +57,28 @@ module Phlexi
         #
         # @param attributes [Hash] Additional attributes for the label.
         # @return [Components::Label] The label component.
-        def label_tag(**attributes)
-          create_component(Components::Label, :label, **attributes)
+        def label_tag(**attributes, &)
+          create_component(Components::Label, :label, **attributes, &)
         end
 
         # Creates an input tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the input.
         # @return [Components::Input] The input component.
-        def input_tag(**attributes)
-          create_component(Components::Input, :input, **attributes)
+        def input_tag(**attributes, &)
+          create_component(Components::Input, :input, **attributes, &)
         end
 
-        def file_input_tag(**attributes)
-          create_component(Components::FileInput, :file, **attributes)
+        def file_input_tag(**attributes, &)
+          create_component(Components::FileInput, :file, **attributes, &)
         end
 
         # Creates a checkbox tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the checkbox.
         # @return [Components::Checkbox] The checkbox component.
-        def checkbox_tag(**attributes)
-          create_component(Components::Checkbox, :checkbox, **attributes)
+        def checkbox_tag(**attributes, &)
+          create_component(Components::Checkbox, :checkbox, **attributes, &)
         end
 
         # Creates collection checkboxes for the field.
@@ -94,8 +94,8 @@ module Phlexi
         #
         # @param attributes [Hash] Additional attributes for the radio button.
         # @return [Components::RadioButton] The radio button component.
-        def radio_button_tag(**attributes)
-          create_component(Components::RadioButton, :radio, **attributes)
+        def radio_button_tag(**attributes, &)
+          create_component(Components::RadioButton, :radio, **attributes, &)
         end
 
         # Creates collection radio buttons for the field.
@@ -111,44 +111,44 @@ module Phlexi
         #
         # @param attributes [Hash] Additional attributes for the textarea.
         # @return [Components::Textarea] The textarea component.
-        def textarea_tag(**attributes)
-          create_component(Components::Textarea, :textarea, **attributes)
+        def textarea_tag(**attributes, &)
+          create_component(Components::Textarea, :textarea, **attributes, &)
         end
 
         # Creates a select tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the select.
         # @return [Components::Select] The select component.
-        def select_tag(**attributes)
-          create_component(Components::Select, :select, **attributes)
+        def select_tag(**attributes, &)
+          create_component(Components::Select, :select, **attributes, &)
         end
 
-        def input_array_tag(**attributes)
-          create_component(Components::InputArray, :array, **attributes)
+        def input_array_tag(**attributes, &)
+          create_component(Components::InputArray, :array, **attributes, &)
         end
 
         # Creates a hint tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the hint.
         # @return [Components::Hint] The hint component.
-        def hint_tag(**attributes)
-          create_component(Components::Hint, :hint, **attributes)
+        def hint_tag(**attributes, &)
+          create_component(Components::Hint, :hint, **attributes, &)
         end
 
         # Creates an error tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the error.
         # @return [Components::Error] The error component.
-        def error_tag(**attributes)
-          create_component(Components::Error, :error, **attributes)
+        def error_tag(**attributes, &)
+          create_component(Components::Error, :error, **attributes, &)
         end
 
         # Creates a full error tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the full error.
         # @return [Components::FullError] The full error component.
-        def full_error_tag(**attributes)
-          create_component(Components::FullError, :full_error, **attributes)
+        def full_error_tag(**attributes, &)
+          create_component(Components::FullError, :full_error, **attributes, &)
         end
 
         # Wraps the field with additional markup.
@@ -188,14 +188,14 @@ module Phlexi
 
         protected
 
-        def create_component(component_class, theme_key, **attributes)
+        def create_component(component_class, theme_key, **attributes, &)
           if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
             raise "input component already defined: #{@field_input_component.inspect}" if @field_input_component
 
             attributes = input_attributes.deep_merge(attributes)
-            @field_input_component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+            @field_input_component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes, &)
           else
-            component_class.new(self, class: component_class_for(theme_key, attributes), **attributes)
+            component_class.new(self, class: component_class_for(theme_key, attributes), **attributes, &)
           end
         end
 

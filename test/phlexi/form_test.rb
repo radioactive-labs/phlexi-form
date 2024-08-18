@@ -14,8 +14,8 @@ module Phlexi
 
     def setup
       @user = OpenStruct.new(
-        id: 1,
         model_name: OpenStruct.new(param_key: "user"),
+        id: 1,
         name: "William Bills",
         nicknames: ["Bill", "Billy", "Will"],
         location: OpenStruct.new(lat: "lat", lng: "lng"),
@@ -176,18 +176,20 @@ module Phlexi
       end
     end
 
-    class CustomForm < Phlexi::Form::Base
+    class CustomFormBase < Phlexi::Form::Base
       class Namespace < Namespace
         def marco
           "Polo"
         end
       end
 
-      delegate :marco, to: :@namespace
-
       private
 
       def default_builder_klass = CustomFieldBuilder
+    end
+
+    class CustomForm < CustomFormBase
+      delegate :marco, to: :@namespace
     end
 
     def test_that_it_uses_implicit_custom_namespace

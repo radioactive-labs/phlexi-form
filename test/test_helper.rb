@@ -1,9 +1,9 @@
-require "minitest/autorun"
+require "phlexi-form"
 
+require "minitest/autorun"
 require "minitest/reporters"
 Minitest::Reporters.use!
 
-require "phlexi-form"
 require "phlex/testing/capybara"
 require "capybara/minitest"
 

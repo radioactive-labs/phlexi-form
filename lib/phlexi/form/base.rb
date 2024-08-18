@@ -22,14 +22,6 @@ module Phlexi
 
       class FieldBuilder < Structure::FieldBuilder; end
 
-      class << self
-        def inherited(subclass)
-          subclass.const_set(:Namespace, Class.new(self::Namespace)) unless subclass.const_defined?(:Namespace)
-          subclass.const_set(:FieldBuilder, Class.new(self::FieldBuilder)) unless subclass.const_defined?(:FieldBuilder)
-          super
-        end
-      end
-
       attr_reader :key, :object
 
       delegate :field, :submit_button, :nest_one, :nest_many, to: :@namespace

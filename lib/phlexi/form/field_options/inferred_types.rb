@@ -10,20 +10,22 @@ module Phlexi
           @inferred_db_type ||= infer_db_type
         end
 
-        def inferred_input_component
-          @inferred_input_component ||= infer_input_component
+        # This will give you the component type e.g. input, textarea, select
+        def inferred_component_type
+          @inferred_component_type ||= infer_component_type
         end
 
-        def inferred_input_type
-          @inferred_input_type ||= infer_input_type(inferred_input_component)
+        # This will give you the subtype of the input component e.g input type="text|date|checkbox" etc
+        def inferred_input_component_subtype
+          @inferred_input_component_subtype ||= infer_input_component_subtype(inferred_component_type)
         end
 
         private
 
         # this returns the element type
-        # one of :input, :textarea, :select, :botton
-        def infer_input_component
-          return :select unless collection.blank?
+        # one of :input, :textarea, :select
+        def infer_component_type
+          return :select unless collection.nil?
 
           case inferred_db_type
           when :text, :json, :jsonb, :hstore
@@ -35,7 +37,7 @@ module Phlexi
 
         # this only applies when input_component is `:input`
         # resolves the type attribute of input components
-        def infer_input_type(component)
+        def infer_input_component_subtype(component)
           case inferred_db_type
           when :string
             infer_string_input_type(key)
@@ -81,8 +83,10 @@ module Phlexi
           case value
           when Integer
             :integer
-          when Float, BigDecimal
+          when Float
             :float
+          when BigDecimal
+            :decimal
           when TrueClass, FalseClass
             :boolean
           when Date

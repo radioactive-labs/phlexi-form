@@ -10,7 +10,7 @@ module Phlexi
 
         def view_template
           div(**attributes.slice(:id, :class)) do
-            field.multi(option_mapper.values) do |builder|
+            field.repeated(option_mapper.values) do |builder|
               render builder.hidden_field_tag if builder.index == 0
 
               field = builder.field(

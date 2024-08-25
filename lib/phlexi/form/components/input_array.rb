@@ -9,7 +9,7 @@ module Phlexi
 
         def view_template
           div(**attributes.slice(:id, :class)) do
-            field.multi(values.length) do |builder|
+            field.repeated(values.length) do |builder|
               render builder.hidden_field_tag if builder.index == 0
 
               field = builder.field(

@@ -163,12 +163,13 @@ module Phlexi
           Components::Wrapper.new(self, class: wrapper_class, inner: inner, **attributes, &)
         end
 
-        # Creates a multi-value field collection.
+        # Creates a repeated field collection.
         #
-        # @param range [Integer, #to_a] The range of keys for each field. If an integer is passed, keys will begin from 1.
+        # @param range [Integer, #to_a] The range of keys for each field.
+        #   If an integer (e.g. 6) is passed, it is converted to a range = 1..6
         # @yield [block] The block to be executed for each item in the collection.
         # @return [FieldCollection] The field collection.
-        def multi(range = nil, &)
+        def repeated(range = nil, &)
           FieldCollection.new(field: self, range: range, &)
         end
 

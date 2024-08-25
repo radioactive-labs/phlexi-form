@@ -20,19 +20,19 @@ module Phlexi
         end
 
         def collection_value_from_association
-          return unless reflection
+          return unless association_reflection
 
-          relation = reflection.klass.all
+          relation = association_reflection.klass.all
 
-          if reflection.respond_to?(:scope) && reflection.scope
-            relation = if reflection.scope.parameters.any?
-              reflection.klass.instance_exec(object, &reflection.scope)
+          if association_reflection.respond_to?(:scope) && association_reflection.scope
+            relation = if association_reflection.scope.parameters.any?
+              association_reflection.klass.instance_exec(object, &association_reflection.scope)
             else
-              reflection.klass.instance_exec(&reflection.scope)
+              association_reflection.klass.instance_exec(&association_reflection.scope)
             end
           else
-            order = reflection.options[:order]
-            conditions = reflection.options[:conditions]
+            order = association_reflection.options[:order]
+            conditions = association_reflection.options[:conditions]
             conditions = object.instance_exec(&conditions) if conditions.respond_to?(:call)
 
             relation = relation.where(conditions) if relation.respond_to?(:where) && conditions.present?

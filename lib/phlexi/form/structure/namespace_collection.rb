@@ -32,7 +32,7 @@ module Phlexi
 
         # Builds and memoizes namespaces for the collection.
         #
-        # @return [Array<Hash>] An array of namespace hashes.
+        # @return [Array<Namespace>] An array of namespace objects.
         def namespaces
           @namespaces ||= @collection.map.with_index do |object, key|
             build_namespace(key, object: object)

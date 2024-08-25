@@ -5,7 +5,7 @@ module Phlexi
     module Structure
       # Generates DOM IDs, names, etc. for a Field, Namespace, or Node based on
       # norms that were established by Rails. These can be used outsidef or Rails in
-      # other Ruby web frameworks since it has now dependencies on Rails.
+      # other Ruby web frameworks since it has no dependencies on Rails.
       class DOM
         def initialize(field:)
           @field = field
@@ -17,7 +17,7 @@ module Phlexi
           @field.value.to_s
         end
 
-        # Walks from the current node to the parent node, grabs the names, and seperates
+        # Walks from the current node to the parent node, grabs the names, and separates
         # them with a `_` for a DOM ID.
         def id
           @id ||= begin

@@ -10,7 +10,7 @@ module Phlexi
     # A form component for building flexible and customizable forms.
     #
     # @example Basic usage
-    #   Phlexi::Form.new(user, action: '/users', method: 'post') do |f|
+    #   Phlexi::Form(user, action: '/users', method: 'post') do
     #     render field(:name).placeholder("Name").input_tag
     #     render field(:email).placeholder("Email").input_tag
     #   end

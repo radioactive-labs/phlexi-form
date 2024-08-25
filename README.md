@@ -159,14 +159,16 @@ Phlexi::Form supports theming through a flexible theming system:
 
 ```ruby
 class ThemedForm < Phlexi::Form::Base
-  private
-
-  def default_theme
-    {
-      input: "border rounded px-2 py-1",
-      label: "font-bold text-gray-700",
-      # Add more theme options here
-    }
+  class FieldBuilder < FieldBuilder
+    private
+    
+    def default_theme
+      {
+        input: "border rounded px-2 py-1",
+        label: "font-bold text-gray-700",
+        # Add more theme options here
+      }
+    end
   end
 end
 ```

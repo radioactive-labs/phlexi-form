@@ -14,7 +14,11 @@ module Phlexi
         end
 
         def has_hint?
-          options[:hint] != false && hint.present?
+          hint.present?
+        end
+
+        def show_hint?
+          has_hint? && !show_errors?
         end
       end
     end

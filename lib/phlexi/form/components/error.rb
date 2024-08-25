@@ -13,7 +13,7 @@ module Phlexi
         private
 
         def render?
-          field.show_errors? && field.has_errors?
+          field.show_errors?
         end
       end
     end

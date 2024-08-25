@@ -13,7 +13,7 @@ module Phlexi
         private
 
         def render?
-          field.hint.present? && (!field.show_errors? || !field.has_errors?)
+          field.show_hint?
         end
       end
     end

@@ -21,8 +21,12 @@ module Phlexi
           object_with_errors? || !object && has_custom_error?
         end
 
-        def show_errors?
+        def can_show_errors?
           options[:error] != false
+        end
+
+        def show_errors?
+          field.can_show_errors? && field.has_errors?
         end
 
         def valid?

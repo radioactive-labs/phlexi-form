@@ -15,17 +15,13 @@ module Phlexi
         def build_attributes
           super
 
-          # only overwrite id if it was set in Base
-          attributes[:id] = field.dom.id if attributes[:id] == "#{field.dom.id}_#{component_name}"
-
-          attributes[:name] = field.dom.name
           attributes[:value] = field.dom.value
 
           build_input_attributes
         end
 
         def build_input_attributes
-          attributes.fetch(:type) { attributes[:type] = field.inferred_input_type }
+          attributes.fetch(:type) { attributes[:type] = field.inferred_input_component_subtype }
           attributes.fetch(:disabled) { attributes[:disabled] = field.disabled? }
 
           case attributes[:type]

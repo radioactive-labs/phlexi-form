@@ -4,6 +4,8 @@ module Phlexi
   module Form
     module Components
       class Textarea < Base
+        include Concerns::HandlesInput
+
         def view_template
           textarea(**attributes) { field.dom.value }
         end
@@ -12,9 +14,6 @@ module Phlexi
 
         def build_attributes
           super
-
-          attributes[:id] = field.dom.id
-          attributes[:name] = field.dom.name
 
           build_textarea_attributes
         end

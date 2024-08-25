@@ -32,6 +32,11 @@ module Phlexi
 
           def build_attributes
             super
+
+            # only overwrite id if it was set in Base
+            attributes[:id] = field.dom.id if attributes[:id] == "#{field.dom.id}_#{component_name}"
+            attributes[:name] = field.dom.name
+
             @input_param = attributes.delete(:input_param) || field.key
           end
 

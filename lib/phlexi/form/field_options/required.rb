@@ -24,7 +24,7 @@ module Phlexi
         end
 
         def required_by_validators?
-          (attribute_validators + reflection_validators).any? { |v| v.kind == :presence && valid_validator?(v) }
+          (attribute_validators + association_reflection_validators).any? { |v| v.kind == :presence && valid_validator?(v) }
         end
 
         def required_by_default?

@@ -14,8 +14,8 @@ module Phlexi
           object.class.validators_on(key)
         end
 
-        def reflection_validators
-          reflection ? object.class.validators_on(reflection.name) : []
+        def association_reflection_validators
+          association_reflection ? object.class.validators_on(association_reflection.name) : []
         end
 
         def valid_validator?(validator)

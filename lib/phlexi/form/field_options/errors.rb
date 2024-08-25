@@ -66,11 +66,11 @@ module Phlexi
         end
 
         def errors_on_association
-          reflection ? object.errors[reflection.name] : []
+          association_reflection ? object.errors[association_reflection.name] : []
         end
 
         def full_errors_on_association
-          reflection ? object.errors.full_messages_for(reflection.name) : []
+          association_reflection ? object.errors.full_messages_for(association_reflection.name) : []
         end
 
         def has_custom_error?

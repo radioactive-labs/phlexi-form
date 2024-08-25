@@ -6,8 +6,8 @@ module Phlexi
       module Associations
         protected
 
-        def reflection
-          @reflection ||= find_association_reflection
+        def association_reflection
+          @association_reflection ||= find_association_reflection
         end
 
         def find_association_reflection

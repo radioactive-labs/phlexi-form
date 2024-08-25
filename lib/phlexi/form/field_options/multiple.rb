@@ -16,7 +16,7 @@ module Phlexi
         private
 
         def calculate_multiple_field_value
-          return true if reflection&.macro == :has_many
+          return true if association_reflection&.macro == :has_many
           return true if multiple_field_array_attribute?
 
           check_multiple_field_from_validators

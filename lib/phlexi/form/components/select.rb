@@ -31,9 +31,6 @@ module Phlexi
         def build_attributes
           super
 
-          attributes[:id] = field.dom.id
-          attributes[:name] = field.dom.name
-
           build_select_attributes
         end
 

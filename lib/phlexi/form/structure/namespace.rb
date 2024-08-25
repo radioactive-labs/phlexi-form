@@ -3,13 +3,18 @@
 module Phlexi
   module Form
     module Structure
-      # A Namespace maps and object to values, but doesn't actually have a value itself. For
+      # A Namespace maps an object to values, but doesn't actually have a value itself. For
       # example, a `User` object or ActiveRecord model could be passed into the `:user` namespace.
-      # To access the values on a Namespace, the `field` can be called for single values.
       #
-      # Additionally, to access namespaces within a namespace, such as if a `User has_many :addresses` in
-      # ActiveRecord, the `namespace` method can be called which will return another Namespace object and
-      # set the current Namespace as the parent.
+      # To access single values on a Namespace, #field can be used.
+      #
+      # To access nested objects within a namespace, two methods are available:
+      #
+      # 1. #nest_one: Used for single nested objects, such as if a `User belongs_to :profile` in
+      #    ActiveRecord. This method returns another Namespace object.
+      #
+      # 2. #nest_many: Used for collections of nested objects, such as if a `User has_many :addresses` in
+      #    ActiveRecord. This method returns a NamespaceCollection object.
       class Namespace < Structure::Node
         include Enumerable
 
@@ -41,9 +46,9 @@ module Phlexi
         # form like this:
         #
         # ```ruby
-        # Superform :user, object: User.new do |form|
-        #   form.nest_one :permission do |permission|
-        #     form.field :role
+        # Phlexi::Form(User.new, as: :user) do
+        #   nest_one :profile do |profile|
+        #     render profile.field(:gender).input_tag
         #   end
         # end
         # ```
@@ -56,10 +61,10 @@ module Phlexi
         # an enumerable or array of `Address` classes:
         #
         # ```ruby
-        # Phlexi::Form.new User.new do |form|
-        #   render form.field(:email).input_tag
-        #   render form.field(:name).input_tag
-        #   form.nest_many :addresses do |address|
+        # Phlexi::Form(User.new) do
+        #   render field(:email).input_tag
+        #   render field(:name).input_tag
+        #   nest_many :addresses do |address|
         #     render address.field(:street).input_tag
         #     render address.field(:state).input_tag
         #     render address.field(:zip).input_tag

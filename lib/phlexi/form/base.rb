@@ -65,18 +65,6 @@ module Phlexi
         instance_exec(&@_content_block) if @_content_block
       end
 
-      # Renders the form tag with its contents.
-      #
-      # @yield The form's content
-      # @return [void]
-      def form_tag(&)
-        form(**form_attributes) do
-          render_hidden_method_field
-          render_authenticity_token if authenticity_token?
-          yield
-        end
-      end
-
       def extract_input(params)
         call unless @_rendered
         @namespace.extract_input(params)
@@ -125,6 +113,23 @@ module Phlexi
         attributes.fetch(:accept_charset) { attributes[:accept_charset] = "UTF-8" }
       end
 
+      # Retrieves the form's CSS classes.
+      #
+      # @return [String] The form's CSS classes
+      attr_reader :form_class
+
+      # Renders the form tag with its contents.
+      #
+      # @yield The form's content
+      # @return [void]
+      def form_tag(&)
+        form(**form_attributes) do
+          render_hidden_method_field
+          render_authenticity_token if authenticity_token?
+          yield
+        end
+      end
+
       # Determines the form's action URL.
       #
       # @return [String, nil] The form's action URL
@@ -147,11 +152,6 @@ module Phlexi
         @form_method ||= (object_form_method || "get").to_s.downcase
         ActiveSupport::StringInquirer.new(@form_method)
       end
-
-      # Retrieves the form's CSS classes.
-      #
-      # @return [String] The form's CSS classes
-      attr_reader :form_class
 
       # Checks if the authenticity token should be included.
       #
@@ -213,13 +213,12 @@ module Phlexi
       #
       # @return [Hash] The form attributes
       def form_attributes
-        {
+        mix({
           id: @namespace.dom_id,
-          action: form_action,
-          method: standardized_form_method,
           class: form_class,
-          **attributes
-        }
+          action: form_action,
+          method: standardized_form_method
+        }, attributes)
       end
 
       # Renders the authenticity token if required.

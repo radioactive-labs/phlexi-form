@@ -57,28 +57,28 @@ module Phlexi
         #
         # @param attributes [Hash] Additional attributes for the label.
         # @return [Components::Label] The label component.
-        def label_tag(**attributes, &)
-          create_component(Components::Label, :label, **attributes, &)
+        def label_tag(**, &)
+          create_component(Components::Label, :label, **, &)
         end
 
         # Creates an input tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the input.
         # @return [Components::Input] The input component.
-        def input_tag(**attributes, &)
-          create_component(Components::Input, :input, **attributes, &)
+        def input_tag(**, &)
+          create_component(Components::Input, :input, **, &)
         end
 
-        def file_input_tag(**attributes, &)
-          create_component(Components::FileInput, :file, **attributes, &)
+        def file_input_tag(**, &)
+          create_component(Components::FileInput, :file, **, &)
         end
 
         # Creates a checkbox tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the checkbox.
         # @return [Components::Checkbox] The checkbox component.
-        def checkbox_tag(**attributes, &)
-          create_component(Components::Checkbox, :checkbox, **attributes, &)
+        def checkbox_tag(**, &)
+          create_component(Components::Checkbox, :checkbox, **, &)
         end
 
         # Creates collection checkboxes for the field.
@@ -86,16 +86,16 @@ module Phlexi
         # @param attributes [Hash] Additional attributes for the collection checkboxes.
         # @yield [block] The block to be executed for each checkbox.
         # @return [Components::CollectionCheckboxes] The collection checkboxes component.
-        def collection_checkboxes_tag(**attributes, &)
-          create_component(Components::CollectionCheckboxes, :collection_checkboxes, **attributes, &)
+        def collection_checkboxes_tag(**, &)
+          create_component(Components::CollectionCheckboxes, :collection_checkboxes, **, &)
         end
 
         # Creates a radio button tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the radio button.
         # @return [Components::RadioButton] The radio button component.
-        def radio_button_tag(**attributes, &)
-          create_component(Components::RadioButton, :radio, **attributes, &)
+        def radio_button_tag(**, &)
+          create_component(Components::RadioButton, :radio, **, &)
         end
 
         # Creates collection radio buttons for the field.
@@ -103,52 +103,52 @@ module Phlexi
         # @param attributes [Hash] Additional attributes for the collection radio buttons.
         # @yield [block] The block to be executed for each radio button.
         # @return [Components::CollectionRadioButtons] The collection radio buttons component.
-        def collection_radio_buttons_tag(**attributes, &)
-          create_component(Components::CollectionRadioButtons, :collection_radio_buttons, **attributes, &)
+        def collection_radio_buttons_tag(**, &)
+          create_component(Components::CollectionRadioButtons, :collection_radio_buttons, **, &)
         end
 
         # Creates a textarea tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the textarea.
         # @return [Components::Textarea] The textarea component.
-        def textarea_tag(**attributes, &)
-          create_component(Components::Textarea, :textarea, **attributes, &)
+        def textarea_tag(**, &)
+          create_component(Components::Textarea, :textarea, **, &)
         end
 
         # Creates a select tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the select.
         # @return [Components::Select] The select component.
-        def select_tag(**attributes, &)
-          create_component(Components::Select, :select, **attributes, &)
+        def select_tag(**, &)
+          create_component(Components::Select, :select, **, &)
         end
 
-        def input_array_tag(**attributes, &)
-          create_component(Components::InputArray, :array, **attributes, &)
+        def input_array_tag(**, &)
+          create_component(Components::InputArray, :array, **, &)
         end
 
         # Creates a hint tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the hint.
         # @return [Components::Hint] The hint component.
-        def hint_tag(**attributes, &)
-          create_component(Components::Hint, :hint, **attributes, &)
+        def hint_tag(**, &)
+          create_component(Components::Hint, :hint, **, &)
         end
 
         # Creates an error tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the error.
         # @return [Components::Error] The error component.
-        def error_tag(**attributes, &)
-          create_component(Components::Error, :error, **attributes, &)
+        def error_tag(**, &)
+          create_component(Components::Error, :error, **, &)
         end
 
         # Creates a full error tag for the field.
         #
         # @param attributes [Hash] Additional attributes for the full error.
         # @return [Components::FullError] The full error component.
-        def full_error_tag(**attributes, &)
-          create_component(Components::FullError, :full_error, **attributes, &)
+        def full_error_tag(**, &)
+          create_component(Components::FullError, :full_error, **, &)
         end
 
         # Wraps the field with additional markup.
@@ -158,9 +158,9 @@ module Phlexi
         # @yield [block] The block to be executed within the wrapper.
         # @return [Components::Wrapper] The wrapper component.
         def wrapped(inner: {}, **attributes, &)
-          wrapper_class = attributes.delete(:class) || themed(attributes.delete(:theme) || :wrapper)
-          inner[:class] = inner.delete(:class) || themed(inner.delete(:theme) || :inner_wrapper)
-          Components::Wrapper.new(self, class: wrapper_class, inner: inner, **attributes, &)
+          attributes = apply_component_theme(attributes, :wrapper)
+          inner = apply_component_theme(inner, :inner_wrapper)
+          Components::Wrapper.new(self, inner: inner, **attributes, &)
         end
 
         # Creates a repeated field collection.
@@ -177,8 +177,8 @@ module Phlexi
         #
         # @param attributes [Hash] Additional attributes for the submit.
         # @return [Components::SubmitButton] The submit button component.
-        def submit_button_tag(**attributes, &)
-          create_component(Components::SubmitButton, :submit_button, **attributes, &)
+        def submit_button_tag(**, &)
+          create_component(Components::SubmitButton, :submit_button, **, &)
         end
 
         def extract_input(params)
@@ -193,15 +193,20 @@ module Phlexi
           if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
             raise "input component already defined: #{@field_input_component.inspect}" if @field_input_component
 
-            attributes = input_attributes.deep_merge(attributes)
-            @field_input_component = component_class.new(self, class: component_class_for(theme_key, attributes), **attributes, &)
+            attributes = mix(input_attributes, attributes)
+            @field_input_component = component_class.new(self, **apply_component_theme(attributes, theme_key), &)
           else
-            component_class.new(self, class: component_class_for(theme_key, attributes), **attributes, &)
+            component_class.new(self, **apply_component_theme(attributes, theme_key), &)
           end
         end
 
-        def component_class_for(theme_key, attributes)
-          attributes.delete(:class) || themed(attributes.key?(:theme) ? attributes.delete(:theme) : theme_key)
+        def apply_component_theme(attributes, theme_key)
+          theme_key = attributes.delete(:theme) || theme_key
+          if attributes.key?(:class!)
+            attributes
+          else
+            mix({class: themed(theme_key)}, attributes)
+          end
         end
 
         def has_value?

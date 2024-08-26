@@ -14,6 +14,7 @@ module Phlexi
         def build_input_attributes
           attributes[:type] = :file
           super
+          # ensure we are always setting it to false
           attributes[:value] = false
         end
 

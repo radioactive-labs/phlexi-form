@@ -34,8 +34,8 @@ module Phlexi
           end
         end
 
-        def submit_button(key = nil, **attributes, &)
-          field(key || SecureRandom.hex).submit_button_tag(**attributes, &)
+        def submit_button(key = nil, **, &)
+          field(key || SecureRandom.hex).submit_button_tag(**, &)
         end
 
         # Creates a `Namespace` child instance with the parent set to the current instance, adds to

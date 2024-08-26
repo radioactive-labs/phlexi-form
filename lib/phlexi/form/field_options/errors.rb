@@ -26,7 +26,7 @@ module Phlexi
         end
 
         def show_errors?
-          field.can_show_errors? && field.has_errors?
+          can_show_errors? && has_errors?
         end
 
         def valid?

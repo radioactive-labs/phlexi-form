@@ -125,7 +125,7 @@ module Phlexi
       def form_tag(&)
         form(**form_attributes) do
           render_hidden_method_field
-          render_authenticity_token if authenticity_token?
+          render_authenticity_token if has_authenticity_token?
           yield
         end
       end
@@ -156,8 +156,8 @@ module Phlexi
       # Checks if the authenticity token should be included.
       #
       # @return [Boolean] True if the authenticity token should be included, false otherwise
-      def authenticity_token?
-        defined?(helpers) && options.fetch(:authenticity_token) { !form_method.get? }
+      def has_authenticity_token?
+        !form_method.get? && ((defined?(helpers) && helpers) || options[:authenticity_token])
       end
 
       # Retrieves the authenticity token.

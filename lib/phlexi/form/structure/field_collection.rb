@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "phlex"
+
 module Phlexi
   module Form
     module Structure
@@ -7,6 +9,8 @@ module Phlexi
         include Enumerable
 
         class Builder
+          include Phlex::Helpers
+
           attr_reader :key, :index
 
           def initialize(key, field, index)
@@ -15,8 +19,9 @@ module Phlexi
             @index = index
           end
 
-          def field(**)
-            @field.class.new(key, input_attributes: @field.input_attributes, **, parent: @field).tap do |field|
+          def field(**options)
+            options = mix({input_attributes: @field.input_attributes}, options)
+            @field.class.new(key, **options, parent: @field).tap do |field|
               yield field if block_given?
             end
           end

@@ -5,6 +5,14 @@ module Phlexi
     module Components
       module Concerns
         module SubmitsForm
+          include Phlexi::Form::Components::Concerns::ExtractsInput
+
+          def extract_input(params)
+            {}
+          end
+
+          protected
+
           def submit_type_value
             if field.object.respond_to?(:persisted?)
               field.object.persisted? ? :update : :create

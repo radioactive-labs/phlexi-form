@@ -125,6 +125,8 @@ module Phlexi
         render field(:invalid_collection_radio_buttons, collection: 1..5).collection_radio_buttons_tag
 
         render field(:input_param, input_attributes: {input_param: :custom_input_param}).input_tag
+
+        render submit_button
       }
 
       params = {

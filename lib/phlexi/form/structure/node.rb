@@ -18,6 +18,10 @@ module Phlexi
           @key = :"#{key}"
           @parent = parent
         end
+
+        def inspect
+          "<#{self.class.name} key=#{key.inspect} parent=#{id.inspect} />"
+        end
       end
     end
   end

@@ -182,22 +182,23 @@ module Phlexi
         end
 
         def extract_input(params)
-          raise "field##{dom.name} did not define an input component" unless @field_input_component
+          raise "field##{dom.name} did not define an input component" unless @field_input_extractor
 
-          @field_input_component.extract_input(params)
+          @field_input_extractor.extract_input(params)
         end
 
         protected
 
         def create_component(component_class, theme_key, **attributes, &)
-          if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
-            raise "input component already defined: #{@field_input_component.inspect}" if @field_input_component
+          attributes = mix(input_attributes, attributes) if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
+          component = component_class.new(self, **apply_component_theme(attributes, theme_key), &)
+          if component_class.include?(Components::Concerns::ExtractsInput)
+            raise "input component already defined: #{@field_input_extractor.inspect}" if @field_input_extractor
 
-            attributes = mix(input_attributes, attributes)
-            @field_input_component = component_class.new(self, **apply_component_theme(attributes, theme_key), &)
-          else
-            component_class.new(self, **apply_component_theme(attributes, theme_key), &)
+            @field_input_extractor = component
           end
+
+          component
         end
 
         def apply_component_theme(attributes, theme_key)

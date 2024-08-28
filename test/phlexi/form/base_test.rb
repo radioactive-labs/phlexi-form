@@ -9,7 +9,7 @@ module Phlexi
       include Capybara::DSL
       include Phlex::Testing::Capybara::ViewHelper
 
-      class TestUser
+      class User
         attr_accessor :id, :name, :email, :address, :hobbies
 
         def initialize(attributes = {})
@@ -18,16 +18,12 @@ module Phlexi
           end
         end
 
-        def model_name
-          OpenStruct.new(param_key: "user")
-        end
-
         def persisted?
           id.present?
         end
       end
 
-      class TestAddress
+      class Address
         attr_accessor :street, :city
 
         def initialize(attributes = {})
@@ -38,11 +34,11 @@ module Phlexi
       end
 
       def setup
-        @user = TestUser.new(
+        @user = User.new(
           id: 1,
           name: "John Doe",
           email: "john@example.com",
-          address: TestAddress.new(
+          address: Address.new(
             street: "123 Main St",
             city: "Anytown"
           ),
@@ -111,6 +107,8 @@ module Phlexi
           field(:hobbies) do |hobby|
             render hobby.input_array_tag
           end
+
+          render submit_button
         end
 
         params = {

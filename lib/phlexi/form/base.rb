@@ -90,10 +90,11 @@ module Phlexi
         else
           @object = record
           if @key.nil?
-            unless object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key.present?
-              raise ArgumentError, "record must respond to #model_name.param_key with a non nil value or set `key` option e.g. Phlexi::Form(record, key: :record)"
+            @key = if object.respond_to?(:model_name) && object.model_name.respond_to?(:param_key) && object.model_name.param_key.present?
+              object.model_name.param_key
+            else
+              object.class.name.demodulize.underscore
             end
-            @key = object.model_name.param_key
           end
         end
         @key = @key.to_sym

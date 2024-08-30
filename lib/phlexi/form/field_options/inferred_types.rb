@@ -66,7 +66,7 @@ module Phlexi
           if object.class.respond_to?(:attribute_types)
             # ActiveModel::Attributes
             custom_type = object.class.attribute_types[key.to_s]
-            return custom_type.type if custom_type
+            return custom_type.type if custom_type&.type
           end
 
           # Check if object responds to the key

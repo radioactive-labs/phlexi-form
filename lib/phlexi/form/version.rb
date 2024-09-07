@@ -2,6 +2,6 @@
 
 module Phlexi
   module Form
-    VERSION = "0.3.0.rc1"
+    VERSION = "0.3.0"
   end
 end

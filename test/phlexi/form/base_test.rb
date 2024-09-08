@@ -53,7 +53,7 @@ module Phlexi
       end
 
       def test_field_creation
-        form = Base.new(@user) do
+        form = Base.inline(@user) do
           field(:name) do |name|
             render name.input_tag
           end
@@ -66,7 +66,7 @@ module Phlexi
       end
 
       def test_nested_form
-        form = Base.new(@user) do
+        form = Base.inline(@user) do
           nest_one(:address) do |address|
             render address.field(:street).input_tag
             render address.field(:city).input_tag
@@ -82,7 +82,7 @@ module Phlexi
       end
 
       def test_collection_form
-        form = Base.new(@user) do
+        form = Base.inline(@user) do
           field(:hobbies) do |hobby|
             render hobby.input_array_tag
           end
@@ -97,7 +97,7 @@ module Phlexi
       end
 
       def test_input_extraction
-        form = Base.new(@user) do
+        form = Base.inline(@user) do
           field(:name) { |name| render name.input_tag }
           field(:email) { |email| render email.input_tag }
           nest_one(:address) do |address|

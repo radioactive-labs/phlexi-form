@@ -22,6 +22,14 @@ module Phlexi
 
       class FieldBuilder < Structure::FieldBuilder; end
 
+      def self.inline(*, **, &block)
+        raise ArgumentError, "block is required" unless block
+
+        new(*, **) do |f|
+          f.instance_exec(&block)
+        end
+      end
+
       attr_reader :key, :object
 
       delegate :field, :submit_button, :nest_one, :nest_many, to: :@namespace
@@ -53,8 +61,8 @@ module Phlexi
       # Renders the form template.
       #
       # @return [void]
-      def view_template
-        form_tag { form_template }
+      def view_template(&)
+        form_tag { form_template(&) }
       end
 
       # Executes the form's content block.
@@ -62,7 +70,7 @@ module Phlexi
       #
       # @return [void]
       def form_template
-        instance_exec(&@_content_block) if @_content_block
+        yield if block_given?
       end
 
       def extract_input(params)

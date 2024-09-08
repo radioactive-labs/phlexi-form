@@ -27,5 +27,5 @@ module Phlexi
 end
 
 def Phlexi.Form(...)
-  Phlexi::Form::Base.new(...)
+  Phlexi::Form::Base.inline(...)
 end

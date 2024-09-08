@@ -202,7 +202,7 @@ module Phlexi
     end
 
     def test_that_it_uses_explicit_custom_field_builder
-      render CustomForm.new(:custom_form) {
+      render CustomForm.inline(:custom_form) {
         render field(:custom_field).custom_tag
         render field(:custom_field).input_tag
       }

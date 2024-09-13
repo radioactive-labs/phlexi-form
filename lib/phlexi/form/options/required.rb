@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Required
         def required?
           options[:required] = options.fetch(:required) { calculate_required }

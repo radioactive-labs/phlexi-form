@@ -17,10 +17,10 @@ module Phlexi
     #
     # @attr_reader [Symbol] key The form's key, derived from the record or explicitly set
     # @attr_reader [ActiveModel::Model, nil] object The form's associated object
-    class Base < COMPONENT_BASE
-      class Namespace < Structure::Namespace; end
+    class Base < Phlexi::Form::HTML
+      class Namespace < Phlexi::Form::Structure::Namespace; end
 
-      class FieldBuilder < Structure::FieldBuilder; end
+      class Builder < Phlexi::Form::Builder; end
 
       def self.inline(*, **, &block)
         raise ArgumentError, "block is required" unless block
@@ -47,7 +47,6 @@ module Phlexi
       def initialize(record, action: nil, method: nil, attributes: {}, **options)
         @form_action = action
         @form_method = method
-        @form_class = options.delete(:class)
         @attributes = attributes
         @namespace_klass = options.delete(:namespace_klass) || default_namespace_klass
         @builder_klass = options.delete(:builder_klass) || default_builder_klass
@@ -125,7 +124,9 @@ module Phlexi
       # Retrieves the form's CSS classes.
       #
       # @return [String] The form's CSS classes
-      attr_reader :form_class
+      def form_class
+        themed(:base, nil)
+      end
 
       # Renders the form tag with its contents.
       #
@@ -244,7 +245,7 @@ module Phlexi
       end
 
       def default_builder_klass
-        self.class::FieldBuilder
+        self.class::Builder
       end
     end
   end

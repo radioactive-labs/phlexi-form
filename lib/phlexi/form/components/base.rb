@@ -3,7 +3,7 @@
 module Phlexi
   module Form
     module Components
-      class Base < COMPONENT_BASE
+      class Base < Phlexi::Form::HTML
         attr_reader :field, :attributes
 
         def initialize(field, **attributes)

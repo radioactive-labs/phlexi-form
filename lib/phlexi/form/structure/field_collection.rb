@@ -1,24 +1,10 @@
 # frozen_string_literal: true
 
-require "phlex"
-
 module Phlexi
   module Form
     module Structure
-      class FieldCollection
-        include Enumerable
-
-        class Builder
-          include Phlex::Helpers
-
-          attr_reader :key, :index
-
-          def initialize(key, field, index)
-            @key = key.to_s
-            @field = field
-            @index = index
-          end
-
+      class FieldCollection < Phlexi::Field::Structure::FieldCollection
+        class Builder < Builder
           def field(**options)
             options = mix({input_attributes: @field.input_attributes}, options)
             @field.class.new(key, **options, parent: @field).tap do |field|
@@ -35,22 +21,16 @@ module Phlexi
           end
         end
 
-        def initialize(field:, range:, &)
-          @field = field
-          @range = case range
-          when Range, Array
-            range
-          when Integer
-            1..range
-          else
-            range.to_a
-          end
-          each(&) if block_given?
-        end
+        private
 
-        def each(&)
-          @range.each.with_index do |key, index|
-            yield Builder.new(key, @field, index)
+        def build_collection(collection)
+          case collection
+          when Range, Array
+            collection
+          when Integer
+            1..collection
+          else
+            collection.to_a
           end
         end
       end

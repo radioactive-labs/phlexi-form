@@ -159,7 +159,7 @@ Phlexi::Form supports theming through a flexible theming system:
 
 ```ruby
 class ThemedForm < Phlexi::Form::Base
-  class FieldBuilder < FieldBuilder
+  class Builder < Builder
     private
     
     def default_theme

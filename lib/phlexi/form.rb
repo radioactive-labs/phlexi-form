@@ -2,6 +2,7 @@
 
 require "zeitwerk"
 require "phlex"
+require "phlexi-field"
 require "active_support/core_ext/object/blank"
 
 module Phlexi
@@ -11,16 +12,12 @@ module Phlexi
       loader.inflector.inflect(
         "phlexi-form" => "Phlexi",
         "phlexi" => "Phlexi",
-        "dom" => "DOM"
+        "html" => "HTML"
       )
       loader.push_dir(File.expand_path("..", __dir__))
       loader.ignore(File.expand_path("../generators", __dir__))
       loader.setup
     end
-
-    COMPONENT_BASE = (defined?(::ApplicationComponent) ? ::ApplicationComponent : Phlex::HTML)
-
-    NIL_VALUE = :__i_phlexi_form_nil_value_i__
 
     class Error < StandardError; end
   end

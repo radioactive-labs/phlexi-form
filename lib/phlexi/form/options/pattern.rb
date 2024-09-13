@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Pattern
         def pattern(pattern = nil)
           if pattern.nil?

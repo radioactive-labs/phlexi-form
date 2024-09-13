@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Collection
         def collection(collection = nil)
           if collection.nil?

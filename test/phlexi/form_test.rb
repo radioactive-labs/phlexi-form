@@ -172,7 +172,7 @@ module Phlexi
       assert_equal expected_extracted_params, form.extract_input(params)
     end
 
-    class CustomFieldBuilder < Phlexi::Form::Base::FieldBuilder
+    class CustomBuilder < Phlexi::Form::Base::Builder
       def custom_tag(...)
         label_tag(...)
       end
@@ -187,7 +187,7 @@ module Phlexi
 
       private
 
-      def default_builder_klass = CustomFieldBuilder
+      def default_builder_klass = CustomBuilder
     end
 
     class CustomForm < CustomFormBase

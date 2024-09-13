@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Autofocus
         def focused?
           options[:autofocus] == true

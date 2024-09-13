@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Length
         def minlength(minlength = nil)
           if minlength.nil?

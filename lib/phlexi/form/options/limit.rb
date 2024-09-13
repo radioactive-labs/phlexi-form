@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module Limit
         def limit(limit = nil)
           if limit.nil?

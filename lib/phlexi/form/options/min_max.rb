@@ -2,7 +2,7 @@
 
 module Phlexi
   module Form
-    module FieldOptions
+    module Options
       module MinMax
         def min(min_value = nil)
           if min_value.nil?

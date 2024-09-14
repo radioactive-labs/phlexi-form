@@ -5,6 +5,8 @@ module Phlexi
     # Builder class is responsible for building form fields with various options and components.
     class Builder < Phlexi::Field::Builder
       include Phlexi::Form::HTML::Behaviour
+      include Options::Validators
+      include Options::InferredTypes
       include Options::Errors
       include Options::Collection
       include Options::Hints
@@ -13,9 +15,11 @@ module Phlexi
       include Options::Disabled
       include Options::Readonly
       include Options::Length
-      include Options::MinMax
+      include Options::Max
+      include Options::Min
       include Options::Pattern
       include Options::Limit
+      include Options::Step
 
       class FieldCollection < Phlexi::Form::Structure::FieldCollection; end
 
@@ -35,14 +39,6 @@ module Phlexi
         @input_attributes = input_attributes
       end
 
-      # Creates a label tag for the field.
-      #
-      # @param attributes [Hash] Additional attributes for the label.
-      # @return [Components::Label] The label component.
-      def label_tag(**, &)
-        create_component(Components::Label, :label, **, &)
-      end
-
       # Creates an input tag for the field.
       #
       # @param attributes [Hash] Additional attributes for the input.
@@ -50,10 +46,50 @@ module Phlexi
       def input_tag(**, &)
         create_component(Components::Input, :input, **, &)
       end
-      alias_method :string_tag, :input_tag
 
-      def file_input_tag(**, &)
-        create_component(Components::FileInput, :file, **, &)
+      def string_tag(**, &)
+        input_tag(type: :text, theme: :string, **, &)
+      end
+
+      def number_tag(**, &)
+        input_tag(type: :number, theme: :number, **, &)
+      end
+
+      def date_tag(**, &)
+        input_tag(type: :date, theme: :date, **, &)
+      end
+
+      def time_tag(**, &)
+        input_tag(type: :time, theme: :time, **, &)
+      end
+
+      def datetime_local_tag(**, &)
+        input_tag(type: :"datetime-local", theme: :datetime, **, &)
+      end
+      alias_method :datetime_tag, :datetime_local_tag
+
+      def email_tag(**, &)
+        input_tag(type: :email, theme: :email, **, &)
+      end
+
+      def password_tag(**, &)
+        input_tag(type: :password, theme: :password, **, &)
+      end
+
+      def phone_tag(**, &)
+        input_tag(type: :tel, theme: :phone, **, &)
+      end
+
+      def color_tag(**, &)
+        input_tag(type: :color, theme: :color, **, &)
+      end
+
+      def url_tag(**, &)
+        input_tag(type: :url, theme: :url, **, &)
+      end
+
+      def search_tag(**, &)
+        input_tag(type: :search, theme: :search, **, &)
       end
 
       # Creates a checkbox tag for the field.
@@ -63,6 +99,15 @@ module Phlexi
       def checkbox_tag(**, &)
         create_component(Components::Checkbox, :checkbox, **, &)
       end
+
+      def boolean_tag(**, &)
+        checkbox_tag(**, theme: :boolean, &)
+      end
+
+      def file_input_tag(**, &)
+        create_component(Components::FileInput, :file, **, &)
+      end
+      alias_method :file_tag, :file_input_tag
 
       # Creates collection checkboxes for the field.
       #
@@ -99,6 +144,11 @@ module Phlexi
       end
       alias_method :text_tag, :textarea_tag
 
+      def hstore_tag(**, &)
+        @value = @value.to_s.tr("{}", "")
+        textarea_tag(**, theme: :hstore, &)
+      end
+
       # Creates a select tag for the field.
       #
       # @param attributes [Hash] Additional attributes for the select.
@@ -106,10 +156,46 @@ module Phlexi
       def select_tag(**, &)
         create_component(Components::Select, :select, **, &)
       end
-      alias_method :association_tag, :select_tag
+
+      def belongs_to_tag(**options, &)
+        options.fetch(:input_param) {
+          options[:input_param] = if association_reflection.respond_to?(:options) && association_reflection.options[:foreign_key]
+            association_reflection.options[:foreign_key]
+          else
+            :"#{association_reflection.name}_id"
+          end
+        }
+        select_tag(**options, &)
+      end
+
+      def polymorphic_belongs_to_tag(**, &)
+        # TODO: this requires a grouped_select component
+        # see: Plutonium::Core::Fields::Inputs::PolymorphicBelongsToAssociationInput
+        raise NotImplementedError, "polymorphic belongs_to associations are not YET supported"
+      end
+
+      def has_one_tag(**, &)
+        raise NotImplementedError, "has_one associations are NOT supported"
+      end
+
+      def has_many_tag(**options, &)
+        options.fetch(:input_param) {
+          options[:input_param] = :"#{association_reflection.name.to_s.singularize}_ids"
+        }
+
+        select_tag(**options, &)
+      end
 
       def input_array_tag(**, &)
         create_component(Components::InputArray, :array, **, &)
+      end
+
+      # Creates a label tag for the field.
+      #
+      # @param attributes [Hash] Additional attributes for the label.
+      # @return [Components::Label] The label component.
+      def label_tag(**, &)
+        create_component(Components::Label, :label, **, &)
       end
 
       # Creates a hint tag for the field.

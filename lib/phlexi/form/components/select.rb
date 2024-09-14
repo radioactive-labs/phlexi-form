@@ -43,6 +43,10 @@ module Phlexi
           attributes[:disabled] = attributes.fetch(:disabled, field.disabled?)
           attributes[:multiple] = attributes.fetch(:multiple, field.multiple?)
           attributes[:size] = attributes.fetch(:size, field.limit)
+
+          if attributes[:multiple]
+            attributes[:name] = "#{attributes[:name].sub(/\[\]$/, "")}[]"
+          end
         end
 
         def blank_option_text

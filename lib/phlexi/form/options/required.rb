@@ -5,7 +5,7 @@ module Phlexi
     module Options
       module Required
         def required?
-          options[:required] = options.fetch(:required) { calculate_required }
+          options.fetch(:required) { options[:required] = calculate_required }
         end
 
         def required!(required = true)

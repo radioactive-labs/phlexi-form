@@ -6,7 +6,7 @@ module Phlexi
       module Limit
         def limit(limit = nil)
           if limit.nil?
-            options[:limit] = options.fetch(:limit) { calculate_limit }
+            options.fetch(:limit) { options[:limit] = calculate_limit }
           else
             options[:limit] = limit
             self

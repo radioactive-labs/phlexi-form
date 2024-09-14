@@ -6,7 +6,7 @@ module Phlexi
       module Pattern
         def pattern(pattern = nil)
           if pattern.nil?
-            options[:pattern] = options.fetch(:pattern) { calculate_pattern }
+            options.fetch(:pattern) { options[:pattern] = calculate_pattern }
           else
             options[:pattern] = pattern
             self

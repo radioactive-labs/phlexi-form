@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "time"
+
 module Phlexi
   module Form
     module Components
@@ -48,12 +50,24 @@ module Phlexi
             attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
             attributes.fetch(:required) { attributes[:required] = field.required? }
             attributes.fetch(:multiple) { attributes[:multiple] = field.multiple? }
-          when :date, :time, :datetime_local
+          when :date, :time, :"datetime-local"
             attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
             attributes.fetch(:readonly) { attributes[:readonly] = field.readonly? }
             attributes.fetch(:required) { attributes[:required] = field.required? }
             attributes.fetch(:min) { attributes[:min] = field.min }
             attributes.fetch(:max) { attributes[:max] = field.max }
+
+            # TODO: Investigate if this is Timezone complaint
+            if field.value.respond_to?(:strftime)
+              attributes[:value] = case attributes[:type]
+              when :date
+                field.value.strftime("%Y-%m-%d")
+              when :time
+                field.value.strftime("%H:%M:%S")
+              when :"datetime-local"
+                field.value.strftime("%Y-%m-%dT%H:%M:%S")
+              end
+            end
           when :color
             attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
           when :range

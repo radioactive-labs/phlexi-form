@@ -6,7 +6,7 @@ module Phlexi
       module Length
         def minlength(minlength = nil)
           if minlength.nil?
-            options[:minlength] = options.fetch(:minlength) { calculate_minlength }
+            options.fetch(:minlength) { options[:minlength] = calculate_minlength }
           else
             options[:minlength] = minlength
             self
@@ -15,7 +15,7 @@ module Phlexi
 
         def maxlength(maxlength = nil)
           if maxlength.nil?
-            options[:maxlength] = options.fetch(:maxlength) { calculate_maxlength }
+            options.fetch(:maxlength) { options[:maxlength] = calculate_maxlength }
           else
             options[:maxlength] = maxlength
             self

@@ -6,7 +6,7 @@ module Phlexi
       module Collection
         def collection(collection = nil)
           if collection.nil?
-            options[:collection] = options.fetch(:collection) { infer_collection }
+            options.fetch(:collection) { options[:collection] = infer_collection }
           else
             options[:collection] = collection
             self
@@ -16,6 +16,10 @@ module Phlexi
         private
 
         def infer_collection
+          if object.class.respond_to?(:defined_enums)
+            return object.class.defined_enums.fetch(key.to_s).keys if object.class.defined_enums.key?(key.to_s)
+          end
+
           collection_value_from_association || collection_value_from_validator
         end
 

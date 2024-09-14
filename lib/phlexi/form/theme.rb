@@ -3,40 +3,130 @@ module Phlexi
     class Theme < Phlexi::Field::Theme
       def self.theme
         @theme ||= {
+          # == Base
           base: nil,
+          hint: nil,
+          error: nil,
+          full_error: :error,
+          wrapper: nil,
+          inner_wrapper: nil,
+          button: nil,
+          submit_button: :button,
 
-          # # input
-          # input: nil,
-          # valid_input: nil,
-          # invalid_input: nil,
-          # neutral_input: nil,
+          # == Label
+          label: nil,
+          invalid_label: nil,
+          valid_label: nil,
+          neutral_label: nil,
 
-          # textarea
+          # == Input
+          input: nil,
+          valid_input: nil,
+          invalid_input: nil,
+          neutral_input: nil,
+
+          # String
+          string: :input,
+          valid_string: :valid_input,
+          invalid_string: :invalid_input,
+          neutral_string: :neutral_input,
+
+          # Email
+          email: :input,
+          valid_email: :valid_input,
+          invalid_email: :invalid_input,
+          neutral_email: :neutral_input,
+
+          # Password
+          password: :input,
+          valid_password: :valid_input,
+          invalid_password: :invalid_input,
+          neutral_password: :neutral_input,
+
+          # Phone
+          phone: :input,
+          valid_phone: :valid_input,
+          invalid_phone: :invalid_input,
+          neutral_phone: :neutral_input,
+
+          # Color
+          color: :input,
+          valid_color: :valid_input,
+          invalid_color: :invalid_input,
+          neutral_color: :neutral_input,
+
+          # Url
+          url: :input,
+          valid_url: :valid_input,
+          invalid_url: :invalid_input,
+          neutral_url: :neutral_input,
+
+          # Search
+          search: :input,
+          valid_search: :valid_input,
+          invalid_search: :invalid_input,
+          neutral_search: :neutral_input,
+
+          # Number
+          number: :input,
+          valid_number: :valid_input,
+          invalid_number: :invalid_input,
+          neutral_number: :neutral_input,
+
+          # Date
+          date: :input,
+          valid_date: :valid_input,
+          invalid_date: :invalid_input,
+          neutral_date: :neutral_input,
+
+          # Time
+          time: :input,
+          valid_time: :valid_input,
+          invalid_time: :invalid_input,
+          neutral_time: :neutral_input,
+
+          # DateTime
+          datetime: :input,
+          valid_datetime: :valid_input,
+          invalid_datetime: :invalid_input,
+          neutral_datetime: :neutral_input,
+
+          # Checkbox
+          checkbox: :input,
+          valid_checkbox: :valid_input,
+          invalid_checkbox: :invalid_input,
+          neutral_checkbox: :neutral_input,
+
+          # Boolean
+          boolan: :checkbox,
+          valid_boolan: :valid_checkbox,
+          invalid_boolan: :invalid_checkbox,
+          neutral_boolan: :neutral_checkbox,
+
+          # Textarea
           textarea: :input,
           valid_textarea: :valid_input,
           invalid_textarea: :invalid_input,
           neutral_textarea: :neutral_input,
 
-          # select
+          # Hstore
+          hstore: :textarea,
+          valid_hstore: :valid_textarea,
+          invalid_hstore: :invalid_textarea,
+          neutral_hstore: :neutral_textarea,
+
+          # Select
           select: :input,
           valid_select: :valid_input,
           invalid_select: :invalid_input,
           neutral_select: :neutral_input,
 
-          # file
+          # File
           file: :input,
           valid_file: :valid_input,
           invalid_file: :invalid_input,
-          neutral_file: :neutral_input,
+          neutral_file: :neutral_input
 
-          # misc
-          # label: nil,
-          # hint: nil,
-          # error: nil,
-          full_error: :error,
-          # wrapper: nil,
-          # inner_wrapper: nil,
-          submit_button: :button
         }.freeze
       end
 

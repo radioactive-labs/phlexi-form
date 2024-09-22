@@ -4,7 +4,7 @@ module Phlexi
   module Form
     module Structure
       class FieldCollection < Phlexi::Field::Structure::FieldCollection
-        class Builder < Builder
+        class Builder < Phlexi::Field::Structure::FieldCollection::Builder
           def field(**options)
             options = mix({input_attributes: @field.input_attributes}, options)
             @field.class.new(key, **options, parent: @field).tap do |field|

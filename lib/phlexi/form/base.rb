@@ -22,6 +22,8 @@ module Phlexi
 
       class Builder < Phlexi::Form::Builder; end
 
+      class Errors < Phlexi::Form::Components::FormErrors; end
+
       def self.inline(*, **, &block)
         raise ArgumentError, "block is required" unless block
 
@@ -61,7 +63,28 @@ module Phlexi
       #
       # @return [void]
       def view_template(&)
-        form_tag { form_template(&) }
+        form_tag {
+          form_errors
+          form_template(&)
+        }
+      end
+
+      def form_errors
+        return unless errors.present?
+
+        render self.class::Errors.new error_message, errors
+      end
+
+      def error_message
+        lookups = []
+        lookups << :"#{key}"
+        lookups << :default_message
+        lookups << options.fetch(:error_message) { "Please review the problems below" }
+        I18n.t(lookups.shift, scope: :"phlexi_form.error_notification", default: lookups)
+      end
+
+      def errors
+        @errors ||= options.fetch(:errors) { object.respond_to?(:errors) && object.errors.full_messages }
       end
 
       # Executes the form's content block.

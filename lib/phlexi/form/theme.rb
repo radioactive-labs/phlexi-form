@@ -13,6 +13,11 @@ module Phlexi
           button: nil,
           submit_button: :button,
 
+          # == Errors
+          form_errors_wrapper: nil,
+          form_errors_message: nil,
+          form_errors_list: nil,
+
           # == Label
           label: nil,
           invalid_label: nil,

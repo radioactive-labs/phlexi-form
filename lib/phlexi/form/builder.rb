@@ -185,6 +185,7 @@ module Phlexi
 
         select_tag(**options, &)
       end
+      alias_method :has_and_belongs_to_many_tag, :has_many_tag
 
       def input_array_tag(**, &)
         create_component(Components::InputArray, :array, **, &)

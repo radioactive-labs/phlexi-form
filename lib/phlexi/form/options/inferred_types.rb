@@ -20,6 +20,8 @@ module Phlexi
             association_reflection.polymorphic? ? :"polymorphic_#{association_reflection.macro}" : association_reflection.macro
           when :attachment, :binary
             :file
+          when :citext
+            infer_string_field_type || :string
           when :date, :time, :datetime, :boolean, :hstore
             inferred_field_type
           else

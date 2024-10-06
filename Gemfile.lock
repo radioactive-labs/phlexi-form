@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    phlexi-form (0.4.3)
+    phlexi-form (0.4.4)
       activesupport
       phlex (~> 1.11)
       phlexi-field
@@ -75,7 +75,7 @@ GEM
     fiber-local (1.1.0)
       fiber-storage
     fiber-storage (1.0.0)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
     irb (1.14.0)
@@ -116,7 +116,7 @@ GEM
     phlex-testing-capybara (0.1.0)
       capybara (~> 3.38)
       phlex (>= 0.5)
-    phlexi-field (0.0.2)
+    phlexi-field (0.0.4)
       activesupport
       fiber-local
       phlex (~> 1.11)

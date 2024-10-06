@@ -9,6 +9,7 @@ module Phlexi
   module Form
     Loader = Zeitwerk::Loader.new.tap do |loader|
       loader.tag = File.basename(__FILE__, ".rb")
+      loader.ignore("#{__dir__}/form/version.rb")
       loader.inflector.inflect(
         "phlexi-form" => "Phlexi",
         "phlexi" => "Phlexi",

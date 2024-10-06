@@ -57,6 +57,7 @@ module Phlexi
         initialize_object_and_key(record)
         initialize_namespace
         initialize_attributes
+        super()
       end
 
       # Renders the form template.

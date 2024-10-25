@@ -276,12 +276,8 @@ module Phlexi
         determine_value_from_association || super
       end
 
-      def determine_value_from_object
-        object.respond_to?(key) ? object.public_send(key) : nil
-      end
-
       def determine_value_from_association
-        return nil unless association_reflection.present?
+        return unless association_reflection.present?
 
         value = object.public_send(key)
         case association_reflection.macro

@@ -184,15 +184,18 @@ module Phlexi
       #
       # @return [ActiveSupport::StringInquirer] The form's HTTP method
       def form_method
-        @form_method ||= (object_form_method || "get").to_s.downcase
-        ActiveSupport::StringInquirer.new(@form_method)
+        @form_method ||= object_form_method || :get
+      end
+
+      def inquirable_form_method
+        ActiveSupport::StringInquirer.new(form_method.to_s.downcase)
       end
 
       # Checks if the authenticity token should be included.
       #
       # @return [Boolean] True if the authenticity token should be included, false otherwise
       def has_authenticity_token?
-        !form_method.get? && ((defined?(helpers) && helpers) || options[:authenticity_token])
+        !inquirable_form_method.get? && ((defined?(helpers) && helpers) || options[:authenticity_token])
       end
 
       # Retrieves the authenticity token.
@@ -234,14 +237,14 @@ module Phlexi
       #
       # @return [Boolean] True if the form method is standard, false otherwise
       def standard_form_method?
-        form_method.get? || form_method.post?
+        inquirable_form_method.get? || inquirable_form_method.post?
       end
 
       # Returns the standardized form method for the HTML form tag.
       #
       # @return [String] The standardized form method
       def standardized_form_method
-        standard_form_method? ? form_method : "post"
+        standard_form_method? ? form_method : :post
       end
 
       # Generates the form attributes hash.

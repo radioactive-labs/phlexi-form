@@ -43,8 +43,8 @@ module Phlexi
       #
       # @param attributes [Hash] Additional attributes for the input.
       # @return [Components::Input] The input component.
-      def input_tag(**, &)
-        create_component(Components::Input, :input, **, &)
+      def input_tag(theme: :input, **, &)
+        create_component(Components::Input, theme, **, &)
       end
 
       def string_tag(**, &)
@@ -252,8 +252,14 @@ module Phlexi
       protected
 
       def create_component(component_class, theme_key, **attributes, &)
-        attributes = mix(input_attributes, attributes) if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
-        component = component_class.new(self, **apply_component_theme(attributes, theme_key), &)
+        theme_attributes = apply_component_theme(attributes, theme_key)
+        extra_attributes = if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
+          input_attributes
+        else
+          {}
+        end
+        attributes = mix(theme_attributes, extra_attributes, attributes)
+        component = component_class.new(self, **attributes, &)
         if component_class.include?(Components::Concerns::ExtractsInput)
           raise "input component already defined: #{@field_input_extractor.inspect}" if @field_input_extractor
 
@@ -264,10 +270,10 @@ module Phlexi
       end
 
       def apply_component_theme(attributes, theme_key)
-        return attributes if attributes.key?(:class!)
+        return {} if attributes.key?(:class!)
 
         theme_key = attributes.delete(:theme) || theme_key
-        mix({class: themed(theme_key, self)}, attributes)
+        {class: themed(theme_key, self)}
       end
 
       def determine_initial_value(value)

@@ -49,6 +49,7 @@ module Phlexi
       def initialize(record, action: nil, method: nil, attributes: {}, **options)
         @form_action = action
         @form_method = method
+        @dom_id = attributes.delete(:id)
         @attributes = attributes
         @namespace_klass = options.delete(:namespace_klass) || default_namespace_klass
         @builder_klass = options.delete(:builder_klass) || default_builder_klass
@@ -135,7 +136,7 @@ module Phlexi
       #
       # @return [void]
       def initialize_namespace
-        @namespace = namespace_klass.root(key, object: object, builder_klass: builder_klass)
+        @namespace = namespace_klass.root(key, object: object, builder_klass: builder_klass, dom_id: @dom_id)
       end
 
       # Initializes form attributes.

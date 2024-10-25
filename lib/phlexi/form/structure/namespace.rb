@@ -17,7 +17,7 @@ module Phlexi
             end
           else
             input = each_with_object({}) do |child, hash|
-              hash.merge! child.extract_input(params[key])
+              hash.merge! child.extract_input(params[key]) if params
             end
             {key => input}
           end

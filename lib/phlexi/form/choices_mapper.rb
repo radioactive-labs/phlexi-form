@@ -2,58 +2,58 @@
 
 module Phlexi
   module Form
-    # OptionMapper is responsible for converting a collection of objects into a hash of options
+    # ChoicesMapper is responsible for converting a collection of objects into a hash of options
     # suitable for form controls, such as `select > options`.
     # Both values and labels are converted to strings.
     #
     # @example Basic usage
     #   collection = [["First", 1], ["Second", 2]]
-    #   mapper = OptionMapper.new(collection)
+    #   mapper = ChoicesMapper.new(collection)
     #   mapper.each { |value, label| puts "#{value}: #{label}" }
     #
     # @example Using with ActiveRecord objects
     #   users = User.all
-    #   mapper = OptionMapper.new(users)
+    #   mapper = ChoicesMapper.new(users)
     #   mapper.each { |id, name| puts "#{id}: #{name}" }
     #
     # @example Array access with different value types
-    #   mapper = OptionMapper.new([["Integer", 1], ["String", "2"], ["Symbol", :three]])
+    #   mapper = ChoicesMapper.new([["Integer", 1], ["String", "2"], ["Symbol", :three]])
     #   puts mapper["1"]      # Output: "Integer"
     #   puts mapper["2"]      # Output: "String"
     #   puts mapper["three"]  # Output: "Symbol"
     #
     # @note This class is thread-safe as it doesn't maintain mutable state.
-    class OptionMapper
+    class ChoicesMapper
       include Enumerable
 
-      # Initializes a new OptionMapper instance.
+      # Initializes a new ChoicesMapper instance.
       #
       # @param collection [#call, #to_a] The collection to be mapped.
       # @param label_method [Symbol, nil] The method to call on each object to get the label.
       # @param value_method [Symbol, nil] The method to call on each object to get the value.
       def initialize(collection, label_method: nil, value_method: nil)
-        @raw_collection = collection
+        @collection = collection
         @label_method = label_method
         @value_method = value_method
       end
 
-      # Iterates over the collection, yielding value-label pairs.
+      # Iterates over the choices, yielding value-label pairs.
       #
-      # @yieldparam value [String] The string value for the current item.
-      # @yieldparam label [String] The string label for the current item.
+      # @yieldparam value [String] The string value for the current choice.
+      # @yieldparam label [String] The string label for the current choice.
       # @return [Enumerator] If no block is given.
       def each(&)
-        collection.each(&)
+        choices.each(&)
       end
 
-      # @return [Array<String>] An array of all labels in the collection.
+      # @return [Array<String>] An array of all choice labels.
       def labels
-        collection.values
+        choices.values
       end
 
-      # @return [Array<String>] An array of all values in the collection.
+      # @return [Array<String>] An array of all choice values.
       def values
-        collection.keys
+        choices.keys
       end
 
       # Retrieves the label for a given value.
@@ -61,22 +61,22 @@ module Phlexi
       # @param value [#to_s] The value to look up.
       # @return [String, nil] The label corresponding to the value, or nil if not found.
       def [](value)
-        collection[value.to_s]
+        choices[value.to_s]
       end
 
       private
 
-      # @return [Hash<String, String>] The materialized collection as a hash of string value => string label.
-      def collection
-        @collection ||= materialize_collection(@raw_collection)
+      # @return [Hash<String, String>] The choices as a hash of {"string value" => "string label"}.
+      def choices
+        @choices ||= materialize_choices(@collection)
       end
 
-      # Converts the raw collection into a materialized hash.
+      # Converts a collection into a materialized hash of choices.
       #
       # @param collection [#call, #to_a] The collection to be materialized.
-      # @return [Hash<String, String>] The materialized collection as a hash of string value => string label.
+      # @return [Hash<String, String>] The materialized choices as a hash of {"string value" => "string label"}.
       # @raise [ArgumentError] If the collection cannot be materialized into an enumerable.
-      def materialize_collection(collection)
+      def materialize_choices(collection)
         case collection
         in Hash => hash
           hash.transform_keys(&:to_s).transform_values(&:to_s)
@@ -85,7 +85,7 @@ module Phlexi
         in Range => range
           range_to_hash(range)
         in Proc => proc
-          materialize_collection(proc.call)
+          materialize_choices(proc.call)
         in Symbol
           raise ArgumentError, "Symbol collections are not supported in this context"
         in Set => set
@@ -94,7 +94,7 @@ module Phlexi
           array_to_hash(Array(collection))
         end
       rescue ArgumentError
-        # Rails.logger.warn("Unhandled inclusion collection type: #{e}")
+        # Rails.logger.warn("Unhandled inclusion collection type: #{e}")TODO
         {}
       end
 
@@ -134,20 +134,20 @@ module Phlexi
           {value: :last, label: :first}
         else
           {
-            value: @value_method || collection_value_methods.find { |m| sample.respond_to?(m) },
-            label: @label_method || collection_label_methods.find { |m| sample.respond_to?(m) }
+            value: @value_method || choice_value_methods.find { |m| sample.respond_to?(m) },
+            label: @label_method || choice_label_methods.find { |m| sample.respond_to?(m) }
           }
         end
       end
 
-      # @return [Array<Symbol>] An array of method names to try for collection values.
-      def collection_value_methods
-        @collection_value_methods ||= %i[id to_s].freeze
+      # @return [Array<Symbol>] An array of method names to try for choice values.
+      def choice_value_methods
+        @choice_value_methods ||= %i[to_value id to_s].freeze
       end
 
-      # @return [Array<Symbol>] An array of method names to try for collection labels.
-      def collection_label_methods
-        @collection_label_methods ||= %i[to_label name title to_s].freeze
+      # @return [Array<Symbol>] An array of method names to try for choice labels.
+      def choice_label_methods
+        @choice_label_methods ||= %i[to_label name title to_s].freeze
       end
     end
   end

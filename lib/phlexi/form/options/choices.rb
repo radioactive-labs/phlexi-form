@@ -3,27 +3,27 @@
 module Phlexi
   module Form
     module Options
-      module Collection
-        def collection(collection = nil)
-          if collection.nil?
-            options.fetch(:collection) { options[:collection] = infer_collection }
+      module Choices
+        def choices(choices = nil)
+          if choices.nil?
+            options.fetch(:choices) { options[:choices] = infer_choices }
           else
-            options[:collection] = collection
+            options[:choices] = choices
             self
           end
         end
 
         private
 
-        def infer_collection
+        def infer_choices
           if object.class.respond_to?(:defined_enums)
             return object.class.defined_enums.fetch(key.to_s).keys if object.class.defined_enums.key?(key.to_s)
           end
 
-          collection_value_from_association || collection_value_from_validator
+          choices_from_association || choices_from_validator
         end
 
-        def collection_value_from_association
+        def choices_from_association
           return unless association_reflection
 
           relation = association_reflection.klass.all
@@ -46,7 +46,7 @@ module Phlexi
           relation
         end
 
-        def collection_value_from_validator
+        def choices_from_validator
           return unless has_validators?
 
           inclusion_validator = find_validator(:inclusion)

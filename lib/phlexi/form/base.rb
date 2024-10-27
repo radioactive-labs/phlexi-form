@@ -98,6 +98,9 @@ module Phlexi
       end
 
       def extract_input(params)
+        params = params.to_unsafe_h if params.respond_to?(:to_unsafe_h)
+        params = {} unless params.is_a?(Hash)
+
         call unless @_rendered
         @namespace.extract_input(params)
       end

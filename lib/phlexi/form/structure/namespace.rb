@@ -15,11 +15,14 @@ module Phlexi
             each_with_object({}) do |child, hash|
               hash.merge! child.extract_input(params[0])
             end
-          else
+          elsif params.is_a?(Hash)
             input = each_with_object({}) do |child, hash|
-              hash.merge! child.extract_input(params[key]) if params
+              input = params[key].is_a?(Hash) ? params[key] : {}
+              hash.merge! child.extract_input(input)
             end
             {key => input}
+          else
+            {key => {}}
           end
         end
       end

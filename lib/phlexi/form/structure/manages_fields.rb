@@ -3,7 +3,7 @@
 module Phlexi
   module Form
     module Structure
-      module HasFields
+      module ManagesFields
         def has_file_input!
           if parent
            parent.has_file_input!

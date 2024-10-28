@@ -4,7 +4,7 @@ module Phlexi
   module Form
     module Structure
       class Namespace < Phlexi::Field::Structure::Namespace
-        include Phlexi::Form::Structure::HasFields
+        include Phlexi::Form::Structure::ManagesFields
         
         class NamespaceCollection < Phlexi::Form::Structure::NamespaceCollection; end
 

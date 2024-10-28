@@ -58,13 +58,13 @@ module Phlexi
       end
 
       def test_collection_checkboxes_tag
-        field = Builder.new(:interests, parent: @parent, object: @object, collection: %w[Sports Music Art])
+        field = Builder.new(:interests, parent: @parent, object: @object, choices: %w[Sports Music Art])
         collection_checkboxes = field.collection_checkboxes_tag
         assert_instance_of Components::CollectionCheckboxes, collection_checkboxes
       end
 
       def test_collection_radio_buttons_tag
-        field = Builder.new(:favorite_color, parent: @parent, object: @object, collection: %w[Red Green Blue])
+        field = Builder.new(:favorite_color, parent: @parent, object: @object, choices: %w[Red Green Blue])
         collection_radio_buttons = field.collection_radio_buttons_tag
         assert_instance_of Components::CollectionRadioButtons, collection_radio_buttons
       end

@@ -4,18 +4,18 @@ module Phlexi
   module Form
     module Components
       module Concerns
-        module HasOptions
+        module AcceptsChoices
           protected
 
           def build_attributes
             super
-            @collection = attributes.delete(:collection) || field.collection
+            @choice_collection = attributes.delete(:choices) || field.choices
             @label_method = attributes.delete(:label_method)
             @value_method = attributes.delete(:value_method)
           end
 
-          def option_mapper
-            @option_mapper ||= OptionMapper.new(@collection, label_method: @label_method, value_method: @value_method)
+          def choices
+            @choices ||= ChoicesMapper.new(@choice_collection, label_method: @label_method, value_method: @value_method)
           end
 
           def selected?(option)
@@ -28,7 +28,7 @@ module Phlexi
           end
 
           def normalize_simple_input(input_value)
-            ([super] & option_mapper.values)[0]
+            ([super] & choices.values)[0]
           end
         end
       end

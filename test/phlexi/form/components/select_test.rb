@@ -71,7 +71,7 @@ module Phlexi
         def test_that_it_renders_select_options
           render Phlexi::Form(:user) {
             render field(:name)
-              .collection(1..5)
+              .choices(1..5)
               .select_tag
           }
 
@@ -87,7 +87,7 @@ module Phlexi
         def test_that_it_selects_single_option
           render Phlexi::Form(:user) {
             render field(:name, value: 4)
-              .collection(1..5)
+              .choices(1..5)
               .select_tag
           }
 
@@ -99,7 +99,7 @@ module Phlexi
           render Phlexi::Form(:user) {
             render field(:name, value: [2, 4])
               .multiple!
-              .collection(1..5)
+              .choices(1..5)
               .select_tag
           }
 
@@ -111,7 +111,7 @@ module Phlexi
 
         def test_that_it_extracts_single_option
           form = Phlexi::Form(:user) {
-            render field(:name).collection(1..5).select_tag
+            render field(:name).choices(1..5).select_tag
           }
 
           assert_equal({user: {name: "1"}}, form.extract_input({user: {name: "1"}}))
@@ -123,7 +123,7 @@ module Phlexi
 
         def test_that_it_extracts_multiple_options
           form = Phlexi::Form(:user) {
-            render field(:name, collection: 1..5).select_tag(multiple: true)
+            render field(:name, choices: 1..5).select_tag(multiple: true)
           }
 
           assert_equal({user: {name: ["1"]}}, form.extract_input({user: {name: "1"}}))

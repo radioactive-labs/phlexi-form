@@ -8,7 +8,7 @@ module Phlexi
       include Options::Validators
       include Options::InferredTypes
       include Options::Errors
-      include Options::Collection
+      include Options::Choices
       include Options::Hints
       include Options::Required
       include Options::Autofocus

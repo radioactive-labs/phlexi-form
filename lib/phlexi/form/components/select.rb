@@ -6,7 +6,7 @@ module Phlexi
       class Select < Base
         include Concerns::HandlesInput
         include Concerns::HandlesArrayInput
-        include Concerns::HasOptions
+        include Concerns::AcceptsChoices
 
         def view_template
           input(type: :hidden, name: attributes[:name], value: "", autocomplete: "off", hidden: true) if include_hidden?
@@ -19,7 +19,7 @@ module Phlexi
         protected
 
         def options
-          option_mapper.each do |value, label|
+          choices.each do |value, label|
             option(selected: selected?(value), value: value) { label }
           end
         end

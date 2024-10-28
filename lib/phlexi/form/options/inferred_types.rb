@@ -7,6 +7,8 @@ module Phlexi
         private
 
         def infer_field_component
+          return :select if choices
+          
           case inferred_field_type
           when :string, :text
             infer_string_field_type || inferred_field_type

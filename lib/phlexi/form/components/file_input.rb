@@ -4,6 +4,8 @@ module Phlexi
   module Form
     module Components
       class FileInput < Input
+        include Phlexi::Form::Components::Concerns::UploadsFile
+
         def view_template
           input(type: :hidden, name: attributes[:name], value: "", autocomplete: "off", hidden: true) if include_hidden?
           input(**attributes)

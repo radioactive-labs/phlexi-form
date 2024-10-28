@@ -4,6 +4,7 @@ module Phlexi
   module Form
     # Builder class is responsible for building form fields with various options and components.
     class Builder < Phlexi::Field::Builder
+      include Phlexi::Form::Structure::HasFields
       include Phlexi::Form::HTML::Behaviour
       include Options::Validators
       include Options::InferredTypes
@@ -260,10 +261,11 @@ module Phlexi
         end
         attributes = mix(theme_attributes, extra_attributes, attributes)
         component = component_class.new(self, **attributes, &)
-        if component_class.include?(Components::Concerns::ExtractsInput)
+        if component_class.include?(Components::Concerns::ExtractsInput) 
           raise "input component already defined: #{@field_input_extractor.inspect}" if @field_input_extractor
 
           @field_input_extractor = component
+          has_file_input! if component_class.include?(Components::Concerns::UploadsFile)
         end
 
         component

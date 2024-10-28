@@ -34,7 +34,7 @@ module Phlexi
 
       attr_reader :key, :object
 
-      delegate :field, :submit_button, :nest_one, :nest_many, to: :@namespace
+      delegate :field, :submit_button, :nest_one, :nest_many, :has_file_input?, to: :@namespace
 
       # Initializes a new Form instance.
       #
@@ -65,10 +65,18 @@ module Phlexi
       #
       # @return [void]
       def view_template(&)
-        form_tag {
+        captured = capture { form_template(&) }
+        form_tag do
           form_errors
-          form_template(&)
-        }
+          plain(captured)
+        end
+
+        # TODO: phlex v2
+        # captured = capture { form_template(&) }
+        # form_tag do
+        #   form_errors
+        #   raw(safe(captured))
+        # end
       end
 
       def form_errors
@@ -254,12 +262,14 @@ module Phlexi
       #
       # @return [Hash] The form attributes
       def form_attributes
-        mix({
+        attrs = mix({
           id: @namespace.dom_id,
           class: form_class,
           action: form_action,
           method: standardized_form_method
         }, attributes)
+        attrs[:enctype] ||= "multipart/form-data" if has_file_input?
+        attrs
       end
 
       # Renders the authenticity token if required.

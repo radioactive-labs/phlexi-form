@@ -4,6 +4,8 @@ module Phlexi
   module Form
     module Structure
       class Namespace < Phlexi::Field::Structure::Namespace
+        include Phlexi::Form::Structure::HasFields
+        
         class NamespaceCollection < Phlexi::Form::Structure::NamespaceCollection; end
 
         def submit_button(key = :submit_button, **, &)

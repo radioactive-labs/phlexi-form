@@ -4,6 +4,8 @@ module Phlexi
   module Form
     module Structure
       class NamespaceCollection < Phlexi::Field::Structure::NamespaceCollection
+        include Phlexi::Form::Structure::HasFields
+        
         def extract_input(params)
           namespace = build_namespace(0)
           @block.call(namespace)

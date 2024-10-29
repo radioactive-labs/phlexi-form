@@ -256,16 +256,13 @@ module Phlexi
       protected
 
       def create_component(component_class, theme_key, **attributes, &)
-        theme_attributes = apply_component_theme(attributes, theme_key)
+        attributes = apply_component_theme(attributes, theme_key)
         # TODO: refactor all this type checking code such that, the concerns will perform these actions.
         # Basically, invert control so that the component asks for the extra attributes
         # or calls #has_file_input!
-        extra_attributes = if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
-          input_attributes
-        else
-          {}
+        if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
+          attributes = mix(input_attributes, attributes)
         end
-        attributes = mix(theme_attributes, extra_attributes, attributes)
         component = component_class.new(self, **attributes, &)
         if component_class.include?(Components::Concerns::ExtractsInput) 
           raise "input component already defined: #{@field_input_extractor.inspect}" if @field_input_extractor
@@ -278,10 +275,10 @@ module Phlexi
       end
 
       def apply_component_theme(attributes, theme_key)
-        return {} if attributes.key?(:class!)
+        return attributes if attributes.key?(:class!)
 
         theme_key = attributes.delete(:theme) || theme_key
-        {class: themed(theme_key, self)}
+        mix({class: themed(theme_key, self)}, attributes)
       end
 
       def determine_initial_value(value)

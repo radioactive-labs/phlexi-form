@@ -92,6 +92,10 @@ module Phlexi
         input_tag(type: :search, theme: :search, **, &)
       end
 
+      def hidden_input_tag(**, &)
+        input_tag(type: :hidden, theme: nil, **, &)
+      end
+      alias_method :hidden_tag, :hidden_input_tag
       # Creates a checkbox tag for the field.
       #
       # @param attributes [Hash] Additional attributes for the checkbox.

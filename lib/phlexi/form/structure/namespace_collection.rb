@@ -10,7 +10,9 @@ module Phlexi
           namespace = build_namespace(0)
           @block.call(namespace)
 
-          inputs = params[key].map { |param| namespace.extract_input([param]) }
+          params = params[key]
+          params = params.values if params.is_a?(Hash)
+          inputs = params.map { |param| namespace.extract_input([param]) }
           {key => inputs}
         end
       end

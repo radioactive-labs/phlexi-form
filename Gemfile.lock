@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    phlexi-form (0.5.5)
+    phlexi-form (0.5.6)
       activesupport
       phlex (~> 1.11)
       phlexi-field

@@ -105,11 +105,11 @@ module Phlexi
         yield if block_given?
       end
 
-      def extract_input(params)
+      def extract_input(params, view_context: nil)
         params = params.to_unsafe_h if params.respond_to?(:to_unsafe_h)
         params = {} unless params.is_a?(Hash)
 
-        call unless @_rendered
+        call(view_context: view_context) unless @_rendered
         @namespace.extract_input(params)
       end
 

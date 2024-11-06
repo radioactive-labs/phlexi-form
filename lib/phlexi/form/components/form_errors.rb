@@ -15,7 +15,7 @@ module Phlexi
               p(class: themed(:form_errors_message, nil)) { @message }
               ul(class: themed(:form_errors_list, nil)) do
                 @errors.each do |error|
-                  li(class: themed(:form_errors_list_item, nil)) { 
+                  li(class: themed(:form_errors_list_item, nil)) {
                     error.to_s
                   }
                 end

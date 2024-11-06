@@ -268,7 +268,7 @@ module Phlexi
           attributes = mix(input_attributes, attributes)
         end
         component = component_class.new(self, **attributes, &)
-        if component_class.include?(Components::Concerns::ExtractsInput) 
+        if component_class.include?(Components::Concerns::ExtractsInput)
           raise "input component already defined: #{@field_input_extractor.inspect}" if @field_input_extractor
 
           @field_input_extractor = component

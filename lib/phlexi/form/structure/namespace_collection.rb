@@ -7,8 +7,11 @@ module Phlexi
         include Phlexi::Form::Structure::ManagesFields
 
         def extract_input(params)
-          namespace = build_namespace(0)
-          @block.call(namespace)
+          namespace = namespaces[0]
+          unless namespace
+            build_namespace(0)
+            @block.call(namespace)
+          end
 
           params = params[key]
           params = params.values if params.is_a?(Hash)

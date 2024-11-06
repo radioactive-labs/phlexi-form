@@ -6,7 +6,7 @@ module Phlexi
       module ManagesFields
         def has_file_input!
           if parent
-           parent.has_file_input!
+            parent.has_file_input!
           else
             @has_file_input = true
           end
@@ -14,7 +14,7 @@ module Phlexi
 
         def has_file_input?
           if parent
-           parent.has_file_input?
+            parent.has_file_input?
           else
             @has_file_input || false
           end

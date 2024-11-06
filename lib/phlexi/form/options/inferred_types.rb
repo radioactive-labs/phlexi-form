@@ -8,7 +8,7 @@ module Phlexi
 
         def infer_field_component
           return :select if inferred_field_type != :association && choices
-          
+
           case inferred_field_type
           when :string, :text
             infer_string_field_type || inferred_field_type

@@ -15,7 +15,7 @@ module Phlexi
 
           params = params[key]
           params = params.values if params.is_a?(Hash)
-          inputs = params.map { |param| namespace.extract_input([param]) }
+          inputs = Array(params).map { |param| namespace.extract_input([param]) }
           {key => inputs}
         end
       end

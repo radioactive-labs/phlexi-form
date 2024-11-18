@@ -264,8 +264,11 @@ module Phlexi
         # TODO: refactor all this type checking code such that, the concerns will perform these actions.
         # Basically, invert control so that the component asks for the extra attributes
         # or calls #has_file_input!
-        if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
-          attributes = mix(input_attributes, attributes)
+        attributes = if component_class.include?(Phlexi::Form::Components::Concerns::HandlesInput)
+          mix(input_attributes, attributes)
+        else
+          # we want to mix to ensure that any overrides are properly applied
+          mix(attributes)
         end
         component = component_class.new(self, **attributes, &)
         if component_class.include?(Components::Concerns::ExtractsInput)

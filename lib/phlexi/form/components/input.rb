@@ -23,7 +23,7 @@ module Phlexi
         end
 
         def build_input_attributes
-          attributes.fetch(:type) { attributes[:type] = field.inferred_string_field_type }
+          attributes.fetch(:type) { attributes[:type] = field.inferred_string_field_type || field.inferred_field_type }
           attributes.fetch(:disabled) { attributes[:disabled] = field.disabled? }
 
           case attributes[:type]
@@ -81,7 +81,8 @@ module Phlexi
             attributes[:autocomplete] = "off"
           else
             # Handle any unrecognized input types
-            # Rails.logger.warn("Unhandled input type: #{attributes[:type]}")
+            Rails.logger.warn("Unhandled input type: #{attributes[:type].inspect}")
+            attributes[:type] = :text
           end
 
           if (attributes[:type] == :file) ? attributes[:multiple] : attributes.delete(:multiple)

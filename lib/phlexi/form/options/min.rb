@@ -18,8 +18,8 @@ module Phlexi
         def calculate_min
           if (numericality_validator = find_numericality_validator)
             get_min_from_validator(numericality_validator)
-          elsif (min = get_min_from_attribute(key))
-            min
+          else
+            get_min_from_attribute(key)
           end
         end
 
@@ -44,8 +44,8 @@ module Phlexi
           if object.class.respond_to?(:attribute_types) && (attribute_type = object.class.attribute_types[attribute.to_s])
             if (range = attribute_type.instance_variable_get(:@range))
               range.min
-            elsif attribute_type.respond_to?(:precision) && (precision = attribute_type.precision)
-              -((precision**8) - ((step && step != "any") ? step : 0.000001))
+              # elsif attribute_type.respond_to?(:precision) && (precision = attribute_type.precision)
+              #   -((precision**8) - ((step && step != "any") ? step : 0.000001))
             end
           end
         end

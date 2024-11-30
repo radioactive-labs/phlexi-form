@@ -50,12 +50,14 @@ module Phlexi
             attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
             attributes.fetch(:required) { attributes[:required] = field.required? }
             attributes.fetch(:multiple) { attributes[:multiple] = field.multiple? }
-          when :date, :time, :"datetime-local"
+          when :date, :time, :"datetime-local", :datetime
             attributes.fetch(:autofocus) { attributes[:autofocus] = field.focused? }
             attributes.fetch(:readonly) { attributes[:readonly] = field.readonly? }
             attributes.fetch(:required) { attributes[:required] = field.required? }
             attributes.fetch(:min) { attributes[:min] = field.min }
             attributes.fetch(:max) { attributes[:max] = field.max }
+
+            attributes[:type] = :"datetime-local" if attributes[:type] == :datetime
 
             # TODO: Investigate if this is Timezone complaint
             if field.value.respond_to?(:strftime)

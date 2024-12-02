@@ -161,15 +161,8 @@ module Phlexi
         create_component(Components::Select, :select, **, &)
       end
 
-      def belongs_to_tag(**options, &)
-        options.fetch(:input_param) {
-          options[:input_param] = if association_reflection.respond_to?(:options) && association_reflection.options[:foreign_key]
-            association_reflection.options[:foreign_key]
-          else
-            :"#{association_reflection.name}_id"
-          end
-        }
-        select_tag(**options, &)
+      def belongs_to_tag(**, &)
+        create_component(Components::BelongsTo, :has_many, **, &)
       end
 
       def polymorphic_belongs_to_tag(**, &)
@@ -182,12 +175,8 @@ module Phlexi
         raise NotImplementedError, "has_one associations are NOT supported"
       end
 
-      def has_many_tag(**options, &)
-        options.fetch(:input_param) {
-          options[:input_param] = :"#{association_reflection.name.to_s.singularize}_ids"
-        }
-
-        select_tag(**options, &)
+      def has_many_tag(**, &)
+        create_component(Components::HasMany, :has_many, **, &)
       end
       alias_method :has_and_belongs_to_many_tag, :has_many_tag
 

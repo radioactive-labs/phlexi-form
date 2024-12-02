@@ -130,7 +130,19 @@ module Phlexi
           file: :input,
           valid_file: :valid_input,
           invalid_file: :invalid_input,
-          neutral_file: :neutral_input
+          neutral_file: :neutral_input,
+
+          # BelongsTo
+          belongs_to: :select,
+          valid_belongs_to: :valid_select,
+          invalid_belongs_to: :invalid_select,
+          neutral_belongs_to: :neutral_select,
+
+          # HasMany
+          has_many: :select,
+          valid_has_many: :valid_select,
+          invalid_has_many: :invalid_select,
+          neutral_has_many: :neutral_select
 
         }.freeze
       end

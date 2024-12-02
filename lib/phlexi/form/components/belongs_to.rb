@@ -9,9 +9,8 @@ module Phlexi
         delegate :association_reflection, to: :field
 
         def build_attributes
-          super
-
           build_belongs_to_attributes
+          super
         end
 
         def build_belongs_to_attributes

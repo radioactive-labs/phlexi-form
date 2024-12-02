@@ -162,7 +162,7 @@ module Phlexi
       end
 
       def belongs_to_tag(**, &)
-        create_component(Components::BelongsTo, :has_many, **, &)
+        create_component(Components::BelongsTo, :belongs_to, **, &)
       end
 
       def polymorphic_belongs_to_tag(**, &)

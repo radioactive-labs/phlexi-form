@@ -4,6 +4,8 @@ Phlexi::Form is a flexible and powerful form builder for Ruby applications. It p
 
 [![Ruby](https://github.com/radioactive-labs/phlexi-form/actions/workflows/main.yml/badge.svg)](https://github.com/radioactive-labs/phlexi-form/actions/workflows/main.yml)
 
+> This project was originally forked from [Superform](https://github.com/rubymonolith/superform) and has been enhanced with additional features and improvements.
+
 ## Features
 
 - Customizable form components (input, select, checkbox, radio button, etc.)

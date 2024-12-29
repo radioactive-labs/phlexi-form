@@ -17,6 +17,7 @@ module Phlexi
           attributes.fetch(:input_param) {
             attributes[:input_param] = :"#{association_reflection.name.to_s.singularize}_ids"
           }
+          attributes[:multiple] = true
         end
       end
     end

@@ -175,10 +175,22 @@ module Phlexi
         raise NotImplementedError, "has_one associations are NOT supported"
       end
 
+      def polymorphic_has_one_tag(**, &)
+        # TODO: this requires a grouped_select component
+        # see: Plutonium::Core::Fields::Inputs::PolymorphicBelongsToAssociationInput
+        raise NotImplementedError, "polymorphic has_one associations are not YET supported"
+      end
+
       def has_many_tag(**, &)
         create_component(Components::HasMany, :has_many, **, &)
       end
       alias_method :has_and_belongs_to_many_tag, :has_many_tag
+
+      def polymorphic_has_many_tag(**, &)
+        # TODO: this requires a grouped_select component
+        # see: Plutonium::Core::Fields::Inputs::PolymorphicBelongsToAssociationInput
+        raise NotImplementedError, "polymorphic has_many associations are not YET supported"
+      end
 
       def input_array_tag(**, &)
         create_component(Components::InputArray, :array, **, &)

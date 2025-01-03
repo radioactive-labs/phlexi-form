@@ -8,6 +8,14 @@ module Phlexi
 
         delegate :association_reflection, to: :field
 
+        def build_association_attributes
+          raise NotImplementedError, "#{self.class}#build_association_attributes"
+        end
+
+        def choices
+          raise NotImplementedError, "#{self.class}#choices"
+        end
+
         def selected?(option)
           case association_reflection.macro
           when :belongs_to, :has_one
@@ -30,8 +38,25 @@ module Phlexi
           super
         end
 
-        def build_association_attributes
-          raise NotImplementedError, "#{self.class}#build_association_attributes"
+        def choices_from_association(klass)
+          relation = klass.all
+
+          if association_reflection.respond_to?(:scope) && association_reflection.scope
+            relation = if association_reflection.scope.parameters.any?
+              association_reflection.klass.instance_exec(object, &association_reflection.scope)
+            else
+              association_reflection.klass.instance_exec(&association_reflection.scope)
+            end
+          else
+            order = association_reflection.options[:order]
+            conditions = association_reflection.options[:conditions]
+            conditions = object.instance_exec(&conditions) if conditions.respond_to?(:call)
+
+            relation = relation.where(conditions) if relation.respond_to?(:where) && conditions.present?
+            relation = relation.order(order) if relation.respond_to?(:order)
+          end
+
+          relation
         end
       end
     end

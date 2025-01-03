@@ -17,6 +17,13 @@ module Phlexi
         grouped_choices.each(&)
       end
 
+      # @return [Array<String>] An array of all choice values.
+      def values
+        @values ||= grouped_choices.values.flat_map(&:values)
+      end
+
+      private
+
       def grouped_choices
         @grouped_choices ||= materialize_grouped_choices(@collection)
       end
@@ -33,8 +40,6 @@ module Phlexi
           record_collection_to_hash
         end
       end
-
-      private
 
       def array_to_grouped_hash(array)
         sample = array.first

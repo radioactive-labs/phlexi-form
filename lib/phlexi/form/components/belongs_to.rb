@@ -3,17 +3,10 @@
 module Phlexi
   module Form
     module Components
-      class BelongsTo < Select
+      class BelongsTo < AssociationBase
         protected
 
-        delegate :association_reflection, to: :field
-
-        def build_attributes
-          build_belongs_to_attributes
-          super
-        end
-
-        def build_belongs_to_attributes
+        def build_association_attributes
           attributes.fetch(:input_param) do
             attributes[:input_param] = if association_reflection.respond_to?(:options) && association_reflection.options[:foreign_key]
               association_reflection.options[:foreign_key]

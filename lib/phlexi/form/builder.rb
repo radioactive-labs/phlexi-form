@@ -276,26 +276,6 @@ module Phlexi
         theme_key = attributes.delete(:theme) || theme_key
         mix({class: themed(theme_key, self)}, attributes)
       end
-
-      def determine_initial_value(value)
-        return value unless value == NIL_VALUE
-
-        determine_value_from_association || super
-      end
-
-      def determine_value_from_association
-        return unless association_reflection.present?
-
-        value = object.public_send(key)
-        case association_reflection.macro
-        when :has_many, :has_and_belongs_to_many
-          value&.map { |v| v.public_send(association_reflection.klass.primary_key) }
-        when :belongs_to, :has_one
-          value&.public_send(association_reflection.klass.primary_key)
-        else
-          raise ArgumentError, "Unsupported association type: #{association_reflection.macro}"
-        end
-      end
     end
   end
 end

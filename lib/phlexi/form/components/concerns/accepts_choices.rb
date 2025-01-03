@@ -24,17 +24,9 @@ module Phlexi
 
           def selected?(option)
             if attributes[:multiple]
-              field_value.any? { |item| item.to_s == option.to_s }
+              Array(field.value).any? { |item| item.to_s == option.to_s }
             else
-              field_value.to_s == option.to_s
-            end
-          end
-
-          def field_value
-            if attributes[:multiple]
-              Array(field.value)
-            else
-              field.value
+              field.value.to_s == option.to_s
             end
           end
 

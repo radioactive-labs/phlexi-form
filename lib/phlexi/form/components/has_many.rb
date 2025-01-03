@@ -3,17 +3,10 @@
 module Phlexi
   module Form
     module Components
-      class HasMany < Select
+      class HasMany < AssociationBase
         protected
 
-        delegate :association_reflection, to: :field
-
-        def build_attributes
-          build_has_many_attributes
-          super
-        end
-
-        def build_has_many_attributes
+        def build_association_attributes
           attributes.fetch(:input_param) {
             attributes[:input_param] = :"#{association_reflection.name.to_s.singularize}_ids"
           }

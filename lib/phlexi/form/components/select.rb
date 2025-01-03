@@ -19,8 +19,18 @@ module Phlexi
         protected
 
         def options
-          choices.each do |value, label|
-            option(selected: selected?(value), value: value) { label }
+          if choices.is_a?(GroupedChoicesMapper)
+            choices.each do |group_label, group_choices|
+              optgroup(label: group_label) do
+                group_choices.each do |value, label|
+                  option(selected: selected?(value), value: value) { label }
+                end
+              end
+            end
+          else
+            choices.each do |value, label|
+              option(selected: selected?(value), value: value) { label }
+            end
           end
         end
 

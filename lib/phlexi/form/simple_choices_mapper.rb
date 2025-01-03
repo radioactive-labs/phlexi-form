@@ -2,31 +2,31 @@
 
 module Phlexi
   module Form
-    # ChoicesMapper is responsible for converting a collection of objects into a hash of options
+    # SimpleChoicesMapper is responsible for converting a collection of objects into a hash of options
     # suitable for form controls, such as `select > options`.
     # Both values and labels are converted to strings.
     #
     # @example Basic usage
     #   collection = [["First", 1], ["Second", 2]]
-    #   mapper = ChoicesMapper.new(collection)
+    #   mapper = SimpleChoicesMapper.new(collection)
     #   mapper.each { |value, label| puts "#{value}: #{label}" }
     #
     # @example Using with ActiveRecord objects
     #   users = User.all
-    #   mapper = ChoicesMapper.new(users)
+    #   mapper = SimpleChoicesMapper.new(users)
     #   mapper.each { |id, name| puts "#{id}: #{name}" }
     #
     # @example Array access with different value types
-    #   mapper = ChoicesMapper.new([["Integer", 1], ["String", "2"], ["Symbol", :three]])
+    #   mapper = SimpleChoicesMapper.new([["Integer", 1], ["String", "2"], ["Symbol", :three]])
     #   puts mapper["1"]      # Output: "Integer"
     #   puts mapper["2"]      # Output: "String"
     #   puts mapper["three"]  # Output: "Symbol"
     #
     # @note This class is thread-safe as it doesn't maintain mutable state.
-    class ChoicesMapper
+    class SimpleChoicesMapper
       include Enumerable
 
-      # Initializes a new ChoicesMapper instance.
+      # Initializes a new SimpleChoicesMapper instance.
       #
       # @param collection [#call, #to_a] The collection to be mapped.
       # @param label_method [Symbol, nil] The method to call on each object to get the label.
@@ -93,9 +93,9 @@ module Phlexi
         else
           array_to_hash(Array(collection))
         end
-      rescue ArgumentError
-        # Rails.logger.warn("Unhandled inclusion collection type: #{e}")TODO
-        {}
+        # rescue ArgumentError
+        #   # Rails.logger.warn("Unhandled inclusion collection type: #{e}")TODO
+        #   {}
       end
 
       # Converts an array to a hash using detected or specified methods.

@@ -127,7 +127,7 @@ module Phlexi
       # @param attributes [Hash] Additional attributes for the radio button.
       # @return [Components::RadioButton] The radio button component.
       def radio_button_tag(**, &)
-        create_component(Components::RadioButton, :radio, **, &)
+        create_component(Components::RadioButton, :radio_button, **, &)
       end
       alias_method :radio_tag, :radio_button_tag
 

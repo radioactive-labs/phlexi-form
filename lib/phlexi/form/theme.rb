@@ -102,6 +102,12 @@ module Phlexi
           invalid_checkbox: :invalid_input,
           neutral_checkbox: :neutral_input,
 
+          # Radio
+          radio: :input,
+          valid_radio: :valid_input,
+          invalid_radio: :invalid_input,
+          neutral_radio: :neutral_input,
+
           # Boolean
           boolan: :checkbox,
           valid_boolan: :valid_checkbox,

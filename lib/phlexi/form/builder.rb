@@ -129,6 +129,7 @@ module Phlexi
       def radio_button_tag(**, &)
         create_component(Components::RadioButton, :radio, **, &)
       end
+      alias_method :radio_tag, :radio_button_tag
 
       # Creates collection radio buttons for the field.
       #

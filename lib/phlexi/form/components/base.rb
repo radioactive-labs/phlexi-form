@@ -23,15 +23,14 @@ module Phlexi
         def append_attribute_classes
           return if attributes[:class] == false
 
-          default_classes = tokens(
-            component_name,
-            -> { attributes[:required] } => "required",
-            -> { !attributes[:required] } => "optional",
-            -> { field.has_errors? } => "invalid",
-            -> { attributes[:readonly] } => "readonly",
-            -> { attributes[:disabled] } => "disabled"
-          )
-          attributes[:class] = tokens(default_classes, attributes[:class])
+          classes = [component_name]
+          classes << "required" if attributes[:required]
+          classes << "optional" unless attributes[:required]
+          classes << "invalid" if field.has_errors?
+          classes << "readonly" if attributes[:readonly]
+          classes << "disabled" if attributes[:disabled]
+          classes << attributes[:class] if attributes[:class]
+          attributes[:class] = classes.join(" ")
         end
 
         def component_name

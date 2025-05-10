@@ -68,15 +68,8 @@ module Phlexi
         captured = capture { form_template(&) }
         form_tag do
           form_errors
-          plain(captured)
+          raw(safe(captured))
         end
-
-        # TODO: phlex v2
-        # captured = capture { form_template(&) }
-        # form_tag do
-        #   form_errors
-        #   raw(safe(captured))
-        # end
       end
 
       def form_errors

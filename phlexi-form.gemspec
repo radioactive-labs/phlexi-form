@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "phlex", "~> 2.0"
-  spec.add_dependency "phlexi-field", "~> 0.1.0"
+  spec.add_dependency "phlexi-field", "~> 0.2.0"
   spec.add_dependency "activesupport"
   spec.add_dependency "zeitwerk"
 

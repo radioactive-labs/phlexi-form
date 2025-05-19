@@ -102,7 +102,10 @@ module Phlexi
         params = params.to_unsafe_h if params.respond_to?(:to_unsafe_h)
         params = {} unless params.is_a?(Hash)
 
-        call(view_context: view_context) unless @_rendered
+        unless @_state
+          raise ArgumentError, "view_context is required if Form has not been rendered" unless view_context
+          view_context.render(self) 
+        end
         @namespace.extract_input(params)
       end
 

@@ -104,7 +104,7 @@ module Phlexi
 
         unless @_state
           raise ArgumentError, "view_context is required if Form has not been rendered" unless view_context
-          view_context.render(self) 
+          view_context.render(self)
         end
         @namespace.extract_input(params)
       end

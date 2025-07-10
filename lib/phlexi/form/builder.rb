@@ -5,6 +5,7 @@ module Phlexi
     # Builder class is responsible for building form fields with various options and components.
     class Builder < Phlexi::Field::Builder
       include Phlexi::Form::HTML::Behaviour
+      include Phlexi::Field::Common::Tokens
       include Options::Validators
       include Options::InferredTypes
       include Options::Errors

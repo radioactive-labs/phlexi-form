@@ -97,6 +97,7 @@ module Phlexi
         input_tag(type: :hidden, theme: nil, **, &)
       end
       alias_method :hidden_tag, :hidden_input_tag
+
       # Creates a checkbox tag for the field.
       #
       # @param attributes [Hash] Additional attributes for the checkbox.
@@ -113,6 +114,14 @@ module Phlexi
         create_component(Components::FileInput, :file, **, &)
       end
       alias_method :file_tag, :file_input_tag
+
+      # Creates a checkbox tag for the field.
+      #
+      # @param attributes [Hash] Additional attributes for the checkbox.
+      # @return [Components::Checkbox] The checkbox component.
+      def range_tag(**, &)
+        create_component(Components::Range, :range, **, &)
+      end
 
       # Creates collection checkboxes for the field.
       #

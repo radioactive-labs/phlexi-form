@@ -17,7 +17,7 @@ module Phlexi
 
         def infer_choices
           if object.class.respond_to?(:defined_enums)
-            return object.class.defined_enums.fetch(key.to_s).keys if object.class.defined_enums.key?(key.to_s)
+            return object.class.defined_enums.fetch(key.to_s).keys.map { |k| [k.humanize, k] } if object.class.defined_enums.key?(key.to_s)
           end
 
           choices_from_validator

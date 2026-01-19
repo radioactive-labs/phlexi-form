@@ -44,7 +44,7 @@ module Phlexi
           end
 
           def normalize_simple_input(input_value)
-            input_value.to_s.presence
+            input_value&.to_s
           end
         end
       end

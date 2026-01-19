@@ -35,7 +35,7 @@ module Phlexi
         end
 
         def blank_option(&)
-          option(selected: field.value.nil?, &)
+          option(selected: field.value.nil?, value: "", &)
         end
 
         def build_attributes

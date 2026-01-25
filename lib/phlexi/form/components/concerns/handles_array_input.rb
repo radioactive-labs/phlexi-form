@@ -12,6 +12,7 @@ module Phlexi
           end
 
           def normalize_array_input(input_value)
+            return if input_value.nil?
             Array(input_value).map { |nested_input_value| normalize_simple_input(nested_input_value) }.compact
           end
         end

@@ -209,7 +209,7 @@ module Phlexi
       #
       # @return [String] The authenticity token
       def authenticity_token
-        options.fetch(:authenticity_token) { helpers.form_authenticity_token }
+        options.fetch(:authenticity_token) { view_context.form_authenticity_token }
       end
 
       # Renders the authenticity token field.

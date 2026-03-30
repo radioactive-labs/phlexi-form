@@ -9,6 +9,7 @@ module Phlexi
 
           def build_attributes
             super
+            @raw_choices = attributes.delete(:choices)
             @label_method = attributes.delete(:label_method)
             @value_method = attributes.delete(:value_method)
             @group_method = attributes.delete(:group_method)
@@ -17,7 +18,7 @@ module Phlexi
 
           def choices
             @choices ||= begin
-              collection = attributes.delete(:choices) || field.choices
+              collection = @raw_choices || field.choices
               build_choice_mapper(collection)
             end
           end

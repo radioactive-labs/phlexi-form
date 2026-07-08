@@ -27,12 +27,20 @@ module Phlexi
           @include_hidden != false
         end
 
+        # Stringified form of Rails' ActiveModel::Type::Boolean::FALSE_VALUES.
+        # Kept as a literal set (rather than depending on activemodel) so a
+        # boolean-ish value from a JSON/text column or params — "f", "F",
+        # "FALSE", "off", 0, :false, ... — is recognised as unchecked. The
+        # component compares field.dom.value, which stringifies the underlying
+        # value, so the integer/symbol/boolean forms collapse onto these.
+        FALSE_VALUES = ["", "0", "f", "F", "false", "FALSE", "off", "OFF"].freeze
+
         def checked?
           return false if field.dom.value == @unchecked_value
 
           if @checked_value == "1" # using default values
             # handle nils, numbers and booleans
-            !["", "0", "false"].include?(field.dom.value)
+            !FALSE_VALUES.include?(field.dom.value)
           else # custom value, so explicit match
             field.dom.value == @checked_value
           end

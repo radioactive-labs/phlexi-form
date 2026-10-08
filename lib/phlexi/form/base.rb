@@ -202,7 +202,7 @@ module Phlexi
       #
       # @return [Boolean] True if the authenticity token should be included, false otherwise
       def has_authenticity_token?
-        !inquirable_form_method.get? && ((defined?(helpers) && helpers) || options[:authenticity_token])
+        !inquirable_form_method.get? && ((respond_to?(:view_context) && view_context) || options[:authenticity_token])
       end
 
       # Retrieves the authenticity token.

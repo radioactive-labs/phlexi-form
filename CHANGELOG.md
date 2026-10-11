@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+- A field's full error now names the attribute by the field's own label when it
+  is given one (`field(:oidc_issuer, label: "Issuer URL")`), so the message
+  under the field matches the label above it. Fields without a label, or with
+  `label: false`, keep ActiveModel's `human_attribute_name`.
+
 ## [0.14.3]
 
 - Fix `Checkbox#checked?` so boolean-ish values from JSON/text columns or params

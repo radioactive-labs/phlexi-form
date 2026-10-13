@@ -9,7 +9,7 @@ module Phlexi
         def extract_input(params)
           namespace = namespaces[0]
           unless namespace
-            build_namespace(0)
+            namespace = build_namespace(0)
             @block.call(namespace)
           end
 

@@ -5,8 +5,7 @@ require "ostruct"
 
 module Phlexi
   class FormTest < Minitest::Test
-    include Capybara::DSL
-    include Phlex::Testing::Capybara::ViewHelper
+    include ComponentTestHelper
 
     FORM_CHARSET = "UTF-8"
     POST_METHOD = "post"
@@ -87,7 +86,7 @@ module Phlexi
         render field(:collection_radio_buttons, choices: 1..2).collection_radio_buttons_tag
         render field(:input_array, value: 1..2).input_array_tag
       end.call
-      expected = '<form id="user_1" method="post" accept-charset="UTF-8"><label class="label optional" id="user_1_field_label" for="user_1_field">Field</label><input class="input optional" id="user_1_field" name="user[field]" value="" type="text"><textarea class="textarea optional" id="user_1_textarea" name="user[textarea]"></textarea><select class="select optional" id="user_1_select" name="user[select]"><option selected></option></select><input type="hidden" name="user[checkbox]" value="0" autocomplete="off" hidden><input class="checkbox optional" id="user_1_checkbox" name="user[checkbox]" value="1" type="checkbox"><input class="radio_button optional" id="user_1_radio" name="user[radio]" value="1" type="radio"><div id="user_1_collection_checkboxes" class="collection_checkboxes optional"><input type="hidden" value="" id="user_1_collection_checkboxes_hidden" name="user[collection_checkboxes][]" hidden autocomplete="off"><input class="checkbox optional" id="user_1_collection_checkboxes_1" name="user[collection_checkboxes][]" value="1" type="checkbox"><label class="label optional" id="user_1_collection_checkboxes_1_label" for="user_1_collection_checkboxes_1">1</label><input class="checkbox optional" id="user_1_collection_checkboxes_2" name="user[collection_checkboxes][]" value="2" type="checkbox"><label class="label optional" id="user_1_collection_checkboxes_2_label" for="user_1_collection_checkboxes_2">2</label></div><div id="user_1_collection_radio_buttons" class="collection_radio_buttons optional"><input type="hidden" value="" id="user_1_collection_radio_buttons_hidden" name="user[collection_radio_buttons][]" hidden autocomplete="off"><input class="radio_button optional" id="user_1_collection_radio_buttons_1" name="user[collection_radio_buttons]" value="1" type="radio"><label class="label optional" id="user_1_collection_radio_buttons_1_label" for="user_1_collection_radio_buttons_1">1</label><input class="radio_button optional" id="user_1_collection_radio_buttons_2" name="user[collection_radio_buttons]" value="2" type="radio"><label class="label optional" id="user_1_collection_radio_buttons_2_label" for="user_1_collection_radio_buttons_2">2</label></div><div id="user_1_input_array" class="input_array optional"><input type="hidden" value="" id="user_1_input_array_hidden" name="user[input_array][]" hidden autocomplete="off"><input class="input optional" id="user_1_input_array_1" name="user[input_array][]" value="1" type="text"><input class="input optional" id="user_1_input_array_2" name="user[input_array][]" value="2" type="text"></div></form>'
+      expected = '<form id="user_1" class="" method="post" accept-charset="UTF-8"><label class="label optional " id="user_1_field_label" for="user_1_field">Field</label><input class="input optional " id="user_1_field" name="user[field]" value="" type="text"><textarea class="textarea optional " id="user_1_textarea" name="user[textarea]"></textarea><select class="select optional " id="user_1_select" name="user[select]"><option selected value=""></option></select><input type="hidden" name="user[checkbox]" value="0" autocomplete="off" hidden><input class="checkbox optional " id="user_1_checkbox" name="user[checkbox]" value="1" type="checkbox"><input class="radio_button optional " id="user_1_radio" name="user[radio]" value="1" type="radio"><div id="user_1_collection_checkboxes" class="collection_checkboxes optional "><input type="hidden" value="" id="user_1_collection_checkboxes_hidden" name="user[collection_checkboxes][]" hidden autocomplete="off"><input class="checkbox optional " id="user_1_collection_checkboxes_1" name="user[collection_checkboxes][]" value="1" type="checkbox"><label class="label optional " id="user_1_collection_checkboxes_1_label" for="user_1_collection_checkboxes_1">1</label><input class="checkbox optional " id="user_1_collection_checkboxes_2" name="user[collection_checkboxes][]" value="2" type="checkbox"><label class="label optional " id="user_1_collection_checkboxes_2_label" for="user_1_collection_checkboxes_2">2</label></div><div id="user_1_collection_radio_buttons" class="collection_radio_buttons optional "><input type="hidden" value="" id="user_1_collection_radio_buttons_hidden" name="user[collection_radio_buttons][]" hidden autocomplete="off"><input class="radio_button optional " id="user_1_collection_radio_buttons_1" name="user[collection_radio_buttons]" value="1" type="radio"><label class="label optional " id="user_1_collection_radio_buttons_1_label" for="user_1_collection_radio_buttons_1">1</label><input class="radio_button optional " id="user_1_collection_radio_buttons_2" name="user[collection_radio_buttons]" value="2" type="radio"><label class="label optional " id="user_1_collection_radio_buttons_2_label" for="user_1_collection_radio_buttons_2">2</label></div><div id="user_1_input_array" class="input_array optional "><input type="hidden" value="" id="user_1_input_array_hidden" name="user[input_array][]" hidden autocomplete="off"><input class="input optional " id="user_1_input_array_1" name="user[input_array][]" value="1" type="text"><input class="input optional " id="user_1_input_array_2" name="user[input_array][]" value="2" type="text"></div></form>'
       assert_equal expected, html_string
     end
 
@@ -158,7 +157,7 @@ module Phlexi
           addresses: [
             {street: "Main St", city: "Salem"},
             {street: "Wall St", city: "New York"},
-            {street: "Acme St", city: nil}
+            {street: "Acme St", city: ""}
           ],
           checked_checkbox: "1", unchecked_checkbox: "0", invalid_checkbox: "0",
           checked_radio: "1",
@@ -169,6 +168,7 @@ module Phlexi
           custom_input_param: "Mangoes"
         }
       }
+      form.call
       assert_equal expected_extracted_params, form.extract_input(params)
     end
 

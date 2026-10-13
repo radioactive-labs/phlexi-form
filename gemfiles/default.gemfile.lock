@@ -1,10 +1,10 @@
 PATH
   remote: ..
   specs:
-    phlexi-form (0.6.2)
+    phlexi-form (0.14.3)
       activesupport
-      phlex (~> 1.11)
-      phlexi-field
+      phlex (~> 2.0)
+      phlexi-field (~> 0.2.0)
       zeitwerk
 
 GEM
@@ -27,6 +27,8 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    activemodel (7.2.1)
+      activesupport (= 7.2.1)
     activesupport (7.2.1)
       base64
       bigdecimal
@@ -38,8 +40,8 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     ansi (1.5.0)
     appraisal (2.5.0)
       bundler
@@ -104,18 +106,18 @@ GEM
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
-    phlex (1.11.0)
-    phlex-testing-capybara (0.1.0)
-      capybara (~> 3.38)
-      phlex (>= 0.5)
-    phlexi-field (0.0.11)
-      activesupport
+    phlex (2.4.1)
+      refract (~> 1.0)
+      zeitwerk (~> 2.7)
+    phlexi-field (0.2.0)
+      activesupport (>= 7.1)
       fiber-local
-      phlex (~> 1.11)
+      phlex (~> 2.0)
       zeitwerk
+    prism (1.9.0)
     psych (5.1.2)
       stringio
-    public_suffix (6.0.1)
+    public_suffix (7.0.5)
     racc (1.8.1)
     rack (3.1.7)
     rack-session (2.0.0)
@@ -144,6 +146,9 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
+    refract (1.1.0)
+      prism
+      zeitwerk
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
@@ -187,19 +192,20 @@ GEM
     webrick (1.8.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.18)
+    zeitwerk (2.8.3)
 
 PLATFORMS
   arm64-darwin-24
   x86_64-darwin
 
 DEPENDENCIES
+  activemodel
   appraisal
   bundle-audit
+  capybara
   combustion
   minitest
   minitest-reporters
-  phlex-testing-capybara
   phlexi-form!
   rake
   standard

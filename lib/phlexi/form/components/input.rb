@@ -24,6 +24,7 @@ module Phlexi
 
         def build_input_attributes
           attributes.fetch(:type) { attributes[:type] = field.inferred_string_field_type || field.inferred_field_type }
+          attributes[:type] = :text if attributes[:type] == :string
           attributes.fetch(:disabled) { attributes[:disabled] = field.disabled? }
 
           case attributes[:type]

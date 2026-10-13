@@ -6,8 +6,7 @@ require "ostruct"
 module Phlexi
   module Form
     class BaseTest < Minitest::Test
-      include Capybara::DSL
-      include Phlex::Testing::Capybara::ViewHelper
+      include ComponentTestHelper
 
       class User
         attr_accessor :id, :name, :email, :address, :hobbies
@@ -123,6 +122,7 @@ module Phlexi
           }
         }
 
+        form.call
         extracted_input = form.extract_input(params)
 
         assert_equal "Jane Smith", extracted_input[:user][:name]

@@ -76,7 +76,7 @@ module Phlexi
         end
 
         def full_errors_on_attribute
-          object.errors.full_messages_for(key)
+          full_messages_for(key)
         end
 
         def errors_on_association
@@ -84,7 +84,39 @@ module Phlexi
         end
 
         def full_errors_on_association
-          association_reflection ? object.errors.full_messages_for(association_reflection.name) : []
+          association_reflection ? full_messages_for(association_reflection.name) : []
+        end
+
+        # ActiveModel names the attribute with human_attribute_name. A field
+        # given its own label names it as the form shows it, so the message
+        # under the field matches the label above it.
+        def full_messages_for(attribute)
+          return object.errors.full_messages_for(attribute) unless custom_label?
+
+          format, *defaults = full_message_formats(attribute)
+          object.errors.messages_for(attribute).map do |message|
+            I18n.t(format, default: defaults, attribute: label, message: message)
+          end
+        end
+
+        # The format keys ActiveModel::Error.full_message looks up, so per-model
+        # and per-attribute formats still apply when the label is swapped in.
+        def full_message_formats(attribute)
+          formats = []
+          if ActiveModel::Error.i18n_customize_full_message && object.class.respond_to?(:i18n_scope)
+            scope = "#{object.class.i18n_scope}.errors.models"
+            formats = object.class.lookup_ancestors.flat_map do |klass|
+              [
+                :"#{scope}.#{klass.model_name.i18n_key}.attributes.#{attribute}.format",
+                :"#{scope}.#{klass.model_name.i18n_key}.format"
+              ]
+            end
+          end
+          formats + [:"errors.format", "%{attribute} %{message}"]
+        end
+
+        def custom_label?
+          label.present? && label != calculate_label
         end
 
         def has_custom_error?

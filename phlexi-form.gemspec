@@ -47,5 +47,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundle-audit"
   spec.add_development_dependency "appraisal"
   spec.add_development_dependency "combustion"
-  spec.add_development_dependency "phlex-testing-capybara"
+  spec.add_development_dependency "capybara"
 end

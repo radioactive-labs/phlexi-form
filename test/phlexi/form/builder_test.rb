@@ -99,51 +99,56 @@ module Phlexi
 
       def test_direct_theme_resolution
         theme = {input: "input", custom_input: "custom-input"}
-        field = create_field_with_theme(theme)
-        assert_equal "input", field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_equal "input", resolver.resolve_theme(:input)
       end
 
       def test_single_level_theme_recursion
         theme = {input: :custom_input, custom_input: "custom-input"}
-        field = create_field_with_theme(theme)
-        assert_equal "custom-input", field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_equal "custom-input", resolver.resolve_theme(:input)
       end
 
       def test_circular_theme_reference
         theme = {input: :custom_input, custom_input: :input}
-        field = create_field_with_theme(theme)
-        assert_nil field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_nil resolver.resolve_theme(:input)
       end
 
       def test_multi_level_theme_recursion
         theme = {input: :level1, level1: :level2, level2: "final-value"}
-        field = create_field_with_theme(theme)
-        assert_equal "final-value", field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_equal "final-value", resolver.resolve_theme(:input)
       end
 
       def test_theme_resolution_with_missing_key
         theme = {other_key: "value"}
-        field = create_field_with_theme(theme)
-        assert_nil field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_nil resolver.resolve_theme(:input)
       end
 
       def test_theme_resolution_with_non_symbol_intermediate_value
         theme = {input: "intermediate", intermediate: "final-value"}
-        field = create_field_with_theme(theme)
-        assert_equal "intermediate", field.send(:resolve_theme, :input)
+        resolver = create_theme(theme)
+        assert_equal "intermediate", resolver.resolve_theme(:input)
       end
 
       def test_theme_resolution_with_falsey
-        field = create_field_with_theme({})
-        assert_nil field.send(:resolve_theme, false)
-        assert_nil field.send(:resolve_theme, nil)
-        assert_nil field.send(:resolve_theme, 0)
+        resolver = create_theme({})
+        assert_nil resolver.resolve_theme(false)
+        assert_nil resolver.resolve_theme(nil)
+        assert_nil resolver.resolve_theme(0)
       end
 
       private
 
-      def create_field_with_theme(theme)
-        Builder.new(:name, parent: @parent, object: @object, theme: theme)
+      class TestTheme < Theme
+        singleton_class.attr_accessor :theme
+      end
+
+      def create_theme(theme)
+        TestTheme.theme = theme
+        TestTheme.new
       end
     end
   end

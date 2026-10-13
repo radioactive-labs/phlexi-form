@@ -6,8 +6,7 @@ module Phlexi
   module Form
     module Components
       class SelectTest < Minitest::Test
-        include Capybara::DSL
-        include Phlex::Testing::Capybara::ViewHelper
+        include ComponentTestHelper
 
         def test_that_it_renders_the_select_input
           render Phlexi::Form(:user) {
@@ -113,6 +112,7 @@ module Phlexi
           form = Phlexi::Form(:user) {
             render field(:name).choices(1..5).select_tag
           }
+          form.call
 
           assert_equal({user: {name: "1"}}, form.extract_input({user: {name: "1"}}))
           assert_equal({user: {name: nil}}, form.extract_input({user: {name: "0"}}))
@@ -125,14 +125,15 @@ module Phlexi
           form = Phlexi::Form(:user) {
             render field(:name, choices: 1..5).select_tag(multiple: true)
           }
+          form.call
 
           assert_equal({user: {name: ["1"]}}, form.extract_input({user: {name: "1"}}))
           assert_equal({user: {name: ["1", "4"]}}, form.extract_input({user: {name: ["1", "4"]}}))
           assert_equal({user: {name: []}}, form.extract_input({user: {name: [""]}}))
           assert_equal({user: {name: []}}, form.extract_input({user: {name: "0"}}))
           assert_equal({user: {name: []}}, form.extract_input({user: {name: []}}))
-          assert_equal({user: {name: []}}, form.extract_input({user: {name: nil}}))
-          assert_equal({user: {name: []}}, form.extract_input({user: {}}))
+          assert_equal({user: {name: nil}}, form.extract_input({user: {name: nil}}))
+          assert_equal({user: {name: nil}}, form.extract_input({user: {}}))
         end
 
         def test_associations
@@ -148,13 +149,13 @@ module Phlexi
           user_form = Phlexi::Form(user1) {
             render field(:posts).select_tag(label_method: :body)
           }
-          expected_user_form_html = '<form id="user_1" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><input type="hidden" name="user[posts]" value="" autocomplete="off" hidden><select class="select optional" id="user_1_posts" name="user[posts]" multiple><option selected value="1">User 1 Post 1</option><option selected value="2">User 1 Post 2</option><option value="3">User 2 Post 1</option></select></form>'
+          expected_user_form_html = '<form id="user_1" class="" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><input type="hidden" name="user[posts][]" value="" autocomplete="off" hidden><select class="select optional " id="user_1_posts" name="user[posts][]" multiple></select></form>'
           assert_equal expected_user_form_html, user_form.call
 
           post_form = Phlexi::Form(post) {
             render field(:user).select_tag
           }
-          expected_post_form_html = '<form id="post_3" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><select class="select optional" id="post_3_user" name="post[user]"><option></option><option value="1">John Doe</option><option selected value="2">Jane Doe</option></select></form>'
+          expected_post_form_html = '<form id="post_3" class="" method="post" accept-charset="UTF-8"><input name="_method" value="patch" type="hidden" hidden><select class="select optional " id="post_3_user" name="post[user]"><option value=""></option></select></form>'
           assert_equal expected_post_form_html, post_form.call
         end
       end

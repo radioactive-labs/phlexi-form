@@ -11,8 +11,7 @@ module Phlexi
       # lowercase "false" used to be recognised, so every other falsey form
       # wrongly rendered checked.
       class CheckboxTest < Minitest::Test
-        include Capybara::DSL
-        include Phlex::Testing::Capybara::ViewHelper
+        include ComponentTestHelper
 
         # true-ish values -> checked
         TRUTHY = [true, 1, "1", "t", "true", "TRUE", "on"].freeze
